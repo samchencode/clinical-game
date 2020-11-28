@@ -1,10 +1,14 @@
 interface IAction {
   type: string;
-  payload: any;
+  payload?: any;
 }
 
 interface IReducer<S> {
-  (state: S, payload: any): S;
+  (state: S, payload?: any): S;
+}
+
+interface IReducerMap<S> {
+  [actionType: string]: IReducer<S>
 }
 
 interface IStore<S> {
@@ -15,7 +19,7 @@ interface IStore<S> {
 
 function StoreModule<S>(
   initialState: S,
-  reducers: { [actionType: string]: IReducer<S> } = {}
+  reducers: IReducerMap<S> = {}
 ): IStore<S> {
   let state = initialState;
 
@@ -47,4 +51,4 @@ function StoreModule<S>(
 }
 
 export default StoreModule;
-export type { IStore, IReducer, IAction };
+export type { IStore, IReducer, IReducerMap, IAction };
