@@ -39,6 +39,7 @@ function StoreModule<S>(
   }
 
   function dispatch(action: IAction) {
+    if(!reducers.hasOwnProperty(action.type)) return;
     state = reducers[action.type](state, action.payload);
     _alertAllSubscribers(state);
   }
