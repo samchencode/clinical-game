@@ -1,8 +1,8 @@
-import { IReducerMap } from './Store';
+import { IReducerMap } from '@/lib/Store';
 import { GameStatus } from './GameState';
 import type { IGameState } from './GameState';
 import * as actions from './gameActionTypes';
-import { deepClone } from './utils';
+import { deepClone } from '@/lib/utils';
 
 function createGameReducers<P> (): IReducerMap<IGameState<P>> {
   return {

@@ -1,8 +1,8 @@
-import Store from "./Store";
-import type { IReducerMap, IReducer, IStore } from "./Store";
+import Store from "@/lib/Store";
+import type { IReducerMap, IReducer, IStore } from "@/lib/Store";
 import { initialGameState } from './GameState';
 import type { IGameState } from './GameState';
-import { deepClone } from "./utils";
+import { deepClone } from "@/lib/utils";
 import createGameStateReducers from './gameReducers';
 
 function GameStoreFactory<P>(
