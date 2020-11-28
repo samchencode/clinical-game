@@ -15,7 +15,7 @@ interface IStore<S> {
 
 function StoreModule<S>(
   initialState: S,
-  reducers: { [action: string]: IReducer<S> } = {}
+  reducers: { [actionType: string]: IReducer<S> } = {}
 ): IStore<S> {
   let state = initialState;
 
