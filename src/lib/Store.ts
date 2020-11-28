@@ -7,11 +7,11 @@ interface Reducer<S> {
   (state: S, payload: any): S;
 }
 
-type Store<S> = {
+interface Store<S> {
   getState: () => S;
   dispatch: (a: Action) => void;
   subscribe: (cb: (newState: S) => void) => void;
-};
+}
 
 function StoreModule<S>(
   initialState: S,
@@ -19,7 +19,7 @@ function StoreModule<S>(
 ): Store<S> {
   let state = initialState;
 
-  type Subscriber = ((newState:S) => void)
+  type Subscriber = (newState: S) => void;
   let subscribers: Subscriber[] = [];
 
   function subscribe(callback: Subscriber) {
@@ -47,3 +47,4 @@ function StoreModule<S>(
 }
 
 export default StoreModule;
+export type { Store, Reducer, Action };
