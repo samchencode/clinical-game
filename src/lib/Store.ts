@@ -1,22 +1,22 @@
-interface Action {
+interface IAction {
   type: string;
   payload: any;
 }
 
-interface Reducer<S> {
+interface IReducer<S> {
   (state: S, payload: any): S;
 }
 
-interface Store<S> {
+interface IStore<S> {
   getState: () => S;
-  dispatch: (a: Action) => void;
+  dispatch: (a: IAction) => void;
   subscribe: (cb: (newState: S) => void) => void;
 }
 
 function StoreModule<S>(
   initialState: S,
-  reducers: { [action: string]: Reducer<S> } = {}
-): Store<S> {
+  reducers: { [action: string]: IReducer<S> } = {}
+): IStore<S> {
   let state = initialState;
 
   type Subscriber = (newState: S) => void;
@@ -34,7 +34,7 @@ function StoreModule<S>(
     return state;
   }
 
-  function dispatch(action: Action) {
+  function dispatch(action: IAction) {
     state = reducers[action.type](state, action.payload);
     _alertAllSubscribers(state);
   }
@@ -47,4 +47,4 @@ function StoreModule<S>(
 }
 
 export default StoreModule;
-export type { Store, Reducer, Action };
+export type { IStore, IReducer, IAction };
