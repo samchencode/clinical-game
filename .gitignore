@@ -1,0 +1,15 @@
+# Dependencies
+node_modules
+
+# Don't commit tests used during development
+**/*.test.ts
+!__tests__/**/*.test.ts
+**/*.spec.ts
+!__tests__/**/*.spec.ts
+**/*.test.js
+!__tests__/**/*.test.js
+**/*.spec.js
+!__tests__/**/*.spec.js
+
+# Bundled Code
+dist
