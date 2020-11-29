@@ -1,9 +1,9 @@
 import Store from "@/lib/Store";
 import type { IReducerMap, IReducer, IStore } from "@/lib/Store";
-import { initialGameState } from './GameState';
-import type { IGameState } from './GameState';
+import { initialGameState } from "./GameState";
+import type { IGameState, IInternalGameState } from "./GameState";
 import { deepClone } from "@/lib/utils";
-import createGameStateReducers from './gameReducers';
+import gameStateReducers from "./gameReducers";
 
 function GameStoreFactory<P>(
   initialPatientState: P,
@@ -11,13 +11,11 @@ function GameStoreFactory<P>(
 ): IStore<IGameState<P>> {
   const initialState: IGameState<P> = {
     patient: initialPatientState,
-    ...initialGameState
+    ...initialGameState,
   };
 
-  const gameStateReducers = createGameStateReducers<P>();
-
   function _addPatientReducers<P>(
-    gameStateReducers: IReducerMap<IGameState<P>>,
+    gameStateReducers: IReducerMap<IInternalGameState>,
     patientReducers: IReducerMap<P>
   ): IReducerMap<IGameState<P>> {
     const patientGameStateReducers = Object.entries(patientReducers).reduce(
@@ -34,7 +32,10 @@ function GameStoreFactory<P>(
       },
       {} as IReducerMap<IGameState<P>>
     );
-    return { ...gameStateReducers, ...patientGameStateReducers };
+    return {
+      ...(gameStateReducers as IReducerMap<IGameState<P>>),
+      ...patientGameStateReducers,
+    };
   }
 
   return Store(

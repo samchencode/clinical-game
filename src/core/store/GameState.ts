@@ -18,4 +18,4 @@ const initialGameState: IInternalGameState = {
 }
 
 export { GameStatus, initialGameState };
-export type { IGameState };
+export type { IGameState, IInternalGameState };
