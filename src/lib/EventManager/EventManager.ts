@@ -11,22 +11,22 @@ interface IEventManager<S> {}
 
 function EventManagerModule<S>(
   store: IStore<S>,
-  emitters: IEventEmitter<S>[],
-  handlers: IEventHandler<S>[],
+  eventEmitters: IEventEmitter<S>[] = [],
+  eventHandlers: IEventHandler<S>[] = [],
 ): IEventManager<S> {
   const handlerMap: {
     [key: string]: IEventHandlerContext<S>[];
   } = {};
+  const emitters = eventEmitters.slice();
 
-  handlers.forEach(h => {
+  eventHandlers.forEach(h => {
     const context = EventHandlerContext(h);
-    if(handlerMap[h.eventType]) handlerMap[h.eventType].push(context);
-    else handlerMap[h.eventType] = [context];
+    if(handlerMap[h.type]) handlerMap[h.type].push(context);
+    else handlerMap[h.type] = [context];
   })
 
-  function _emit(eventType: IEventEmitter<S>["type"], newState: S) {
+  function _emit(eventType: string, newState: S) {
     if (!handlerMap.hasOwnProperty(eventType)) return;
-
     handlerMap[eventType].forEach((h) =>
       h.executeStrategy(newState, store.dispatch)
     );
@@ -42,3 +42,4 @@ function EventManagerModule<S>(
 }
 
 export default EventManagerModule;
+export type { IEventEmitter };

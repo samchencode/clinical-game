@@ -7,7 +7,7 @@ interface IEventHandlerStrategy<S> {
 interface IEventHandler<S> {
   handle: IEventHandlerStrategy<S>;
   delayMs?: number;
-  eventType: string;
+  type: string;
 }
 
 interface IEventHandlerContext<S> {
