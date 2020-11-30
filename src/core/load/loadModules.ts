@@ -7,8 +7,8 @@ import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patien
 
 interface IGameState<P> extends IBaseGameState, IPatientState<P> {};
 
-interface IModuleLoader<M> {
-  load(helper: IModuleLoadHelper<IGameState<unknown>>): (...args: any) => M;
+interface IModuleLoader<M, P extends object> {
+  load(helper: IModuleLoadHelper<IGameState<unknown>>): (params?: P) => M;
 }
 
 function loadModules<P> (params: {

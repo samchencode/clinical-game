@@ -3,6 +3,7 @@ import type { IReducerMap, IReducer } from "@/lib/Store/Store";
 import { deepClone } from "./utils";
 
 interface IPatientModule {}
+interface IPatientModuleParameters {}
 interface IPatientModuleLoaderParameters<P> {
   initialState: P;
   reducers: IReducerMap<P>;
@@ -12,7 +13,7 @@ interface IPatientState<P> {
   patient: P;
 }
 
-function PatientModule(): IPatientModule {
+function PatientModule(params: IPatientModuleParameters = {}): IPatientModule {
   return {};
 }
 
@@ -30,7 +31,7 @@ const _makePatientStateReducers = <P>(
 
 function createPatientModule<P>(
   params: IPatientModuleLoaderParameters<P>
-): IModuleLoader<IPatientModule> {
+): IModuleLoader<IPatientModule, IPatientModuleParameters> {
   return {
     load(helper) {
       helper.storeBuilder.registerInitialState(() => ({
