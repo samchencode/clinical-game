@@ -47,3 +47,4 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
 }
 
 export default StoreBuilder;
+export type { IStoreBuilder };

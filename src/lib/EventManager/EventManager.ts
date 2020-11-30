@@ -42,4 +42,4 @@ function EventManagerModule<S>(
 }
 
 export default EventManagerModule;
-export type { IEventEmitter };
+export type { IEventEmitter, IEventManager };
