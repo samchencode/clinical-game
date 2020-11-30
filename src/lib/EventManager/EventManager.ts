@@ -7,13 +7,13 @@ interface IEventEmitter<S> {
   shouldEmit(state: S): boolean;
 }
 
-interface IEventManager<S> {}
+interface IEventManager {}
 
 function EventManagerModule<S>(
   store: IStore<S>,
   eventEmitters: IEventEmitter<S>[] = [],
   eventHandlers: IEventHandler<S>[] = [],
-): IEventManager<S> {
+): IEventManager {
   const handlerMap: {
     [key: string]: IEventHandlerContext<S>[];
   } = {};
