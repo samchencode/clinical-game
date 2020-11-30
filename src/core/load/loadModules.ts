@@ -19,6 +19,7 @@ function loadModules<P> (params: {
 
   return {
     Patient: PatientModule.load(helper),
+    Store: helper.storeBuilder.buildStore,
   }
 }
 

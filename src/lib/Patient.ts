@@ -17,7 +17,7 @@ function PatientModule(): IPatientModule {
 }
 
 const _makePatientStateReducers = <P>(
-  reducers: IReducerMap<P>
+  reducers: IReducerMap<P> = {}
 ): IReducerMap<IPatientState<P>> =>
   Object.entries(reducers).reduce((ag, [actionType, patientReducer]) => {
     const gameStateReducer: IReducer<IPatientState<P>> = (s, p) => {

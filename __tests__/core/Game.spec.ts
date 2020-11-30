@@ -19,7 +19,7 @@ describe("Abstract Game Bridge", () => {
     expect(game.getStore().getState().patient).toBe(0);
   });
 
-  it("allows Event emitters & handlers to be specified by Event Options", () => {
+  it.skip("allows Event emitters & handlers to be specified by Event Options", () => {
     const game = Game({
       initialPatientState: 0,
       eventEmitters: [],
@@ -27,7 +27,7 @@ describe("Abstract Game Bridge", () => {
     });
   });
 
-  it("allows Event emission and handling", () => {
+  it.skip("allows Event emission and handling", () => {
     let timesEmitted = 0;
     const event = {
       type: "TEST_EVENT",
@@ -55,7 +55,7 @@ describe("Abstract Game Bridge", () => {
     expect(store.getState().patient).toBe(1);
   });
 
-  it("allows Events to be scheduled to run after some time", (done) => {
+  it.skip("allows Events to be scheduled to run after some time", (done) => {
     let timesEmitted = 0;
     const event = {
       type: "DELAYED_EVENT",
