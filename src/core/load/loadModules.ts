@@ -2,19 +2,19 @@ import ModuleLoadHelper from './ModuleLoadHelper';
 import type { IModuleLoadHelper } from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
 import createPatientModule from '@/lib/Patient';
-import type { IPatientModuleParameters } from '@/lib/Patient';
+import type { IPatientModuleParameters, IPatientState } from '@/lib/Patient';
 
-interface IGameState extends IBaseGameState {};
+interface IGameState<P> extends IBaseGameState, IPatientState<P> {};
 
 interface IModuleLoader<M> {
-  load(helper: IModuleLoadHelper<IGameState>): () => M;
+  load(helper: IModuleLoadHelper<IGameState<unknown>>): () => M;
 }
 
 function loadModules<P> (params: {
   patient: IPatientModuleParameters<P>
 }) {
 
-  const helper = ModuleLoadHelper<IGameState>();
+  const helper = ModuleLoadHelper<IGameState<P>>();
   const PatientModule = createPatientModule(params.patient);
 
   return {
@@ -22,5 +22,5 @@ function loadModules<P> (params: {
   }
 }
 
-export type { IModuleLoader };
+export type { IModuleLoader, IGameState };
 export default loadModules;

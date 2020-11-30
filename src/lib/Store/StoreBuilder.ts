@@ -2,11 +2,11 @@ import type { IReducerMap, IStore } from "./Store";
 import Store from "./Store";
 
 interface IMixinFactory {
-  <S>(): S;
+  (): object;
 }
 
 interface IReducerMixinFactory extends IMixinFactory {
-  <S, R extends IReducerMap<S>>(): R;
+  <S>(): IReducerMap<S>;
 }
 
 interface IStoreBuilder<S extends object> {
@@ -23,7 +23,7 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
     initialStateMixins.push(fn);
   }
 
-  function registerReducer(fn: IMixinFactory) {
+  function registerReducer(fn: IReducerMixinFactory) {
     reducerMixins.push(fn);
   }
 
