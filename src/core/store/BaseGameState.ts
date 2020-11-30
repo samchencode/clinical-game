@@ -13,5 +13,5 @@ const initialBaseGameState: IBaseGameState = {
   status: GameStatus.NOT_STARTED,
 }
 
-export { initialBaseGameState };
-export type { GameStatus, IBaseGameState };
+export { initialBaseGameState, GameStatus };
+export type { IBaseGameState };

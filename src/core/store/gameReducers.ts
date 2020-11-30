@@ -1,10 +1,10 @@
 import type { IReducerMap } from "@/lib/Store/Store";
-import { GameStatus } from "./GameState";
-import type { IInternalGameState } from "./GameState";
+import { GameStatus } from "./BaseGameState";
+import type { IBaseGameState } from "./BaseGameState";
 import * as actions from "./gameActionTypes";
 import { deepClone } from "@/lib/utils";
 
-const gameReducers: IReducerMap<IInternalGameState> = {
+const gameReducers: IReducerMap<IBaseGameState> = {
   [actions.GAME_START](state) {
     const newState = deepClone(state);
     newState.status = GameStatus.IN_PROGRESS;

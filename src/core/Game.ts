@@ -1,9 +1,9 @@
 import type { IReducerMap } from "@/lib/Store/Store";
 import type { IStore } from "@/lib/Store/Store";
-import type { IGameState } from '@/core/store/GameState';
 import loadModules from './load/loadModules';
+import type { IGameState } from './load/loadModules';
 
-interface IGameOptions<P, S extends IGameState<P>> {
+interface IGameOptions<P> {
   initialPatientState: P;
   patientReducers?: IReducerMap<P>;
   eventEmitters?: [any?];
@@ -14,7 +14,7 @@ interface IGame<P> {
   getStore(): IStore<IGameState<P>>
 }
 
-function AbstractGameModule<P, S extends IGameState<P>>(options: IGameOptions<P, S>): IGame<P> {
+function AbstractGameModule<P>(options: IGameOptions<P>): IGame<P> {
   
   const loader = loadModules<P>({
     patient: {
