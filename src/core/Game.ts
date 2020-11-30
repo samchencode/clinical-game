@@ -1,7 +1,7 @@
 import type { IReducerMap } from "@/lib/Store/Store";
 import type { IStore } from "@/lib/Store/Store";
-import loadModules from './load/loadModules';
-import type { IGameState } from './load/loadModules';
+import loadModules from './module/loadModules';
+import type { IGameState } from './module/loadModules';
 
 interface IGameOptions<P> {
   initialPatientState: P;
