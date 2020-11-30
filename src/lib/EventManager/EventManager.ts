@@ -44,3 +44,11 @@ function EventManagerModule<S>(
 
 export default EventManagerModule;
 export type { IEventEmitter, IEventManager };
+
+const createEventModule = <S>(): IModuleLoader<IEventManager> => ({
+  load(helper) {
+    return EventManagerModule;
+  }
+})
+
+export { createEventModule };
