@@ -1,4 +1,4 @@
-import { IReducerMap } from "@/lib/Store";
+import type { IReducerMap } from "@/lib/Store/Store";
 import { GameStatus } from "./GameState";
 import type { IInternalGameState } from "./GameState";
 import * as actions from "./gameActionTypes";

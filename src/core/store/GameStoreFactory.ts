@@ -1,5 +1,5 @@
-import Store from "@/lib/Store";
-import type { IReducerMap, IReducer, IStore } from "@/lib/Store";
+import Store from "@/lib/Store/Store";
+import type { IReducerMap, IReducer, IStore } from "@/lib/Store/Store";
 import { initialGameState } from "./GameState";
 import type { IGameState, IInternalGameState } from "./GameState";
 import { deepClone } from "@/lib/utils";

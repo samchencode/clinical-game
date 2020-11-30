@@ -1,4 +1,4 @@
-import type { IStore } from "../Store";
+import type { IStore } from "../Store/Store";
 import EventHandlerContext from './EventHandler';
 import type { IEventHandler, IEventHandlerContext } from './EventHandler';
 

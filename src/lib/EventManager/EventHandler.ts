@@ -1,4 +1,4 @@
-import type { IAction } from "../Store";
+import type { IAction } from "../Store/Store";
 
 interface IEventHandlerStrategy<S> {
   (state: S, dispatch: (a: IAction) => void): void;

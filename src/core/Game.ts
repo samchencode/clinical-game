@@ -1,6 +1,6 @@
 import GameStoreFactory from "@/core/store/GameStoreFactory";
-import type { IReducerMap } from "@/lib/Store";
-import type { IStore } from "@/lib/Store";
+import type { IReducerMap } from "@/lib/Store/Store";
+import type { IStore } from "@/lib/Store/Store";
 import type { IGameState } from '@/core/store/GameState';
 import EventManager from  "@/lib/EventManager/EventManager";
 import type { IEventEmitter } from "@/lib/EventManager/EventManager";
