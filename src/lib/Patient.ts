@@ -37,7 +37,7 @@ function createPatientModule<P>(
         patient: params.initialState,
       }));
 
-      helper.storeBuilder.registerReducer(() =>
+      helper.storeBuilder.registerReducerMap(() =>
         _makePatientStateReducers(params.reducers)
       );
       return PatientModule;

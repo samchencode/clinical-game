@@ -11,7 +11,7 @@ interface IReducerMixinFactory extends IMixinFactory {
 
 interface IStoreBuilder<S extends object> {
   registerInitialState(fn: IMixinFactory): void;
-  registerReducer(fn: IReducerMixinFactory): void;
+  registerReducerMap(fn: IReducerMixinFactory): void;
   buildStore(): IStore<S>;
 }
 
@@ -23,7 +23,7 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
     initialStateMixins.push(fn);
   }
 
-  function registerReducer(fn: IReducerMixinFactory) {
+  function registerReducerMap(fn: IReducerMixinFactory) {
     reducerMixins.push(fn);
   }
 
@@ -41,7 +41,7 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
 
   return {
     registerInitialState,
-    registerReducer,
+    registerReducerMap,
     buildStore,
   };
 }
