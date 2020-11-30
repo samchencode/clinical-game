@@ -6,7 +6,7 @@ import type { IPatientModuleParameters } from '@/lib/Patient';
 
 interface IGameState extends IBaseGameState {};
 
-interface ILoadable<M> {
+interface IModuleLoader<M> {
   load(helper: IModuleLoadHelper<IGameState>): () => M;
 }
 
@@ -22,5 +22,5 @@ function loadModules<P> (params: {
   }
 }
 
-export type { ILoadable };
+export type { IModuleLoader };
 export default loadModules;

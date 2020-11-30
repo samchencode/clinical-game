@@ -1,4 +1,4 @@
-import type { ILoadable } from "@/core/load/loadModules";
+import type { IModuleLoader } from "@/core/load/loadModules";
 import type { IReducerMap } from "@/lib/Store/Store";
 
 interface IPatientModule {}
@@ -11,14 +11,13 @@ function PatientModule(): IPatientModule {
   return {};
 }
 
-function createPatientModule<P>(params: IPatientModuleParameters<P>) {
-  const loadable: ILoadable<IPatientModule> = {
+function createPatientModule<P>(params: IPatientModuleParameters<P>): IModuleLoader<IPatientModule> {
+  return {
     load(helper) {
       helper.storeBuilder;
       return PatientModule;
     },
   };
-  return loadable;
 }
 
 export default createPatientModule;
