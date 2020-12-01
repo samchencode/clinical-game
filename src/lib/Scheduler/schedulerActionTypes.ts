@@ -1,0 +1,3 @@
+export const REGISTER_EVENT = "REGISTER_EVENT";
+export const STALE_EVENT = "STALE_EVENT";
+export const CANCEL_EVENT = "CANCEL_EVENT";
