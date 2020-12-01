@@ -17,10 +17,15 @@ interface IStore<S> {
   subscribe: (cb: (newState: S) => void) => void;
 }
 
-function StoreModule<S>(
+interface IStoreParameters<S> {
   initialState: S,
-  reducers: IReducerMap<S> = {}
-): IStore<S> {
+  reducers?: IReducerMap<S>
+}
+
+function StoreModule<S>({
+  initialState,
+  reducers = {}
+}: IStoreParameters<S>): IStore<S> {
   let state = initialState;
 
   type Subscriber = (newState: S) => void;

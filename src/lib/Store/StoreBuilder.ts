@@ -36,7 +36,7 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
     const reducers: IReducerMap<S> = _composeMixins<IReducerMap<S>>(
       reducerMixins
     );
-    return Store(initialState, reducers);
+    return Store({initialState, reducers});
   }
 
   return {
