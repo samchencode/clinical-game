@@ -1,5 +1,6 @@
 enum GameStatus {
-  NOT_STARTED = 0,
+  LOADING,
+  PENDING_START,
   IN_PROGRESS,
   WON,
   LOST,
@@ -10,7 +11,7 @@ interface IBaseGameState {
 }
 
 const initialBaseGameState: IBaseGameState = {
-  status: GameStatus.NOT_STARTED,
+  status: GameStatus.LOADING,
 }
 
 export { initialBaseGameState, GameStatus };

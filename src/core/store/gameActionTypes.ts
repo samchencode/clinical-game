@@ -1,2 +1,3 @@
- export const GAME_START = "GAME_START";
- export const GAME_END = "GAME_END";
+ export const START_GAME = "GAME_START";
+ export const END_GAME = "GAME_END";
+ export const FINISH_LOADING = "FINISH_LOADING";

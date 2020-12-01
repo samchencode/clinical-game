@@ -5,16 +5,21 @@ import * as actions from "./gameActionTypes";
 import { deepClone } from "@/lib/utils";
 
 const gameReducers: IReducerMap<IBaseGameState> = {
-  [actions.GAME_START](state) {
+  [actions.START_GAME](state) {
     const newState = deepClone(state);
     newState.status = GameStatus.IN_PROGRESS;
     return newState;
   },
-  [actions.GAME_END](state, { win }) {
+  [actions.END_GAME](state, { win }) {
     const newState = deepClone(state);
     newState.status = win ? GameStatus.WON : GameStatus.LOST;
     return newState;
   },
+  [actions.FINISH_LOADING](state) {
+    const newState = deepClone(state);
+    newState.status = GameStatus.PENDING_START;
+    return newState;
+  }
 };
 
 export default gameReducers;
