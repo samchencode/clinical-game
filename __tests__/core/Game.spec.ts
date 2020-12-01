@@ -16,7 +16,7 @@ describe("Abstract Game Bridge", () => {
       },
     });
 
-    expect(game.getStore().getState().patient).toBe(0);
+    expect(game.store.getState().patient).toBe(0);
   });
 
   it("accepts a scheduled event and run an action after timer", (done) => {

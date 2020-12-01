@@ -12,11 +12,7 @@ interface IGameOptions<P> {
   initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
 }
 
-interface IGame<P> {
-  getStore(): IStore<IGameState<P>>;
-}
-
-function AbstractGameModule<P>(options: IGameOptions<P>): IGame<P> {
+function AbstractGameModule<P>(options: IGameOptions<P>) {
   const loader = loadModules<P>({
     patient: {
       initialState: options.initialPatientState,
@@ -37,13 +33,19 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGame<P> {
     initialEvents: options.initialScheduledEvents,
   });
 
-  function getStore() {
-    return store;
-  }
-
   return {
-    getStore,
+    store: {
+      getState: store.getState,
+      dispatch: store.dispatch,
+      subscribe: store.subscribe,
+    },
+    scheduler: {
+      schedule: scheduler.scheduleEvent,
+      cancel: scheduler.cancelEvent,
+      getPendingEvents: scheduler.getPendingEvents,
+    }
   };
 }
 
 export default AbstractGameModule;
+
