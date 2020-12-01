@@ -20,3 +20,5 @@ export const isNode = new Function(
 export const isBrowser = new Function(
   "try {return this===window;}catch(e){return false;}"
 );
+
+export const generateRandomString = (): string => btoa(String(Math.random()).slice(2));

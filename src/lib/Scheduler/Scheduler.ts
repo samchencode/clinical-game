@@ -1,18 +1,15 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
-import type { IStore, IAction } from "@/lib/Store/Store";
+import type { IStore } from "@/lib/Store/Store";
 import schedulerReducers from "./schedulerReducers";
 import * as actions from "./schedulerActionTypes";
+import { IEventParameters, IEvent } from './Event';
+import Event from './Event';
 
-interface IEvent {
-  action: IAction;
-  delayMs: number;
-  timerId?: NodeJS.Timeout | number;
-}
 
 interface IScheduler {}
 interface ISchedulerParameters<S> {
   store: IStore<S>;
-  initialEvents?: IEvent[];
+  initialEvents?: IEventParameters[];
 }
 
 interface ISchedulerState {
@@ -31,7 +28,7 @@ function SchedulerModule<S>(params: ISchedulerParameters<S>): IScheduler {
   if (params.initialEvents) {
     params.store.dispatch({
       type: actions.REGISTER_EVENT,
-      payload: params.initialEvents,
+      payload: params.initialEvents.map(Event),
     });
   }
   return {};
@@ -52,4 +49,4 @@ function createSchedulerModule<S extends ISchedulerState>(): IModuleLoader<
 
 export default SchedulerModule;
 export { createSchedulerModule };
-export type { IEvent, ISchedulerState };
+export type { ISchedulerState };

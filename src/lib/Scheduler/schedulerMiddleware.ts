@@ -1,32 +1,45 @@
-import { IMiddleware, IAction, IMiddlewareContext } from "@/lib/Store/Store";
-import { IEvent } from "./Scheduler";
+import type { ISchedulerState } from "./Scheduler";
+import type {
+  IMiddleware,
+  IAction,
+  IMiddlewareContext,
+} from "@/lib/Store/Store";
+import type { IEvent } from "./Event";
 import * as actions from "./schedulerActionTypes";
 import { isNode, deepClone } from "@/lib/utils";
 
-interface SideEffectMap {
+interface SideEffectMap<S extends ISchedulerState> {
   [action: string]: (
-    dispatch: IMiddlewareContext["dispatch"],
+    context: IMiddlewareContext<S>,
     action: IAction
   ) => typeof action | void;
 }
 
 const setTimeoutOnEvent = (
-  dispatch: IMiddlewareContext["dispatch"],
-  { action: scheduledAction, delayMs }: IEvent
-) => {
-  let timerId: NodeJS.Timeout | number = setTimeout(() => {
+  dispatch: IMiddlewareContext<unknown>["dispatch"],
+  e: IEvent
+): NodeJS.Timeout | number => {
+  const { action: scheduledAction, delayMs, repeat } = e;
+  const timerId = setTimeout(() => {
+    const updateSchedule: IAction = {
+      type: repeat > 0 ? actions.REPEAT_EVENT : actions.STALE_EVENT,
+    };
+    if (repeat > 0) {
+      updateSchedule.payload = {
+        eventId: e.eventId,
+        event: { ...e, timerId, repeat: repeat - 1 },
+      };
+    } else updateSchedule.payload = e.eventId;
+
     dispatch(scheduledAction);
-    dispatch({
-      type: actions.STALE_EVENT,
-      payload: timerId,
-    });
+    dispatch(updateSchedule);
   }, delayMs);
   return timerId;
 };
 
-const sideEffects: SideEffectMap = {
+const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
   [actions.REGISTER_EVENT](
-    dispatch,
+    { dispatch },
     action: {
       payload: IEvent | IEvent[];
     } & IAction
@@ -49,21 +62,33 @@ const sideEffects: SideEffectMap = {
     }
     return newAction;
   },
-  [actions.CANCEL_EVENT](dispatch, { payload: timerId }) {
+  [actions.REPEAT_EVENT](
+    { dispatch },
+    action: { payload: { eventId: string; event: IEvent } } & IAction
+  ) {
+    const newAction = deepClone(action);
+    const { event } = newAction.payload;
+    event.timerId = setTimeoutOnEvent(dispatch, event);
+    return newAction;
+  },
+  [actions.CANCEL_EVENT]({ state }, { payload: eventId }) {
+    const { timerId } = state.scheduler.pendingDispatch.find(
+      (e) => e.eventId === eventId
+    );
     isNode()
       ? global.clearTimeout(timerId as NodeJS.Timeout)
       : window.clearTimeout(timerId as number);
   },
-};
+});
 
-const schedulerMiddleware: IMiddleware = ({ dispatch }) => (next) => (
-  action
-) => {
-  if (sideEffects[action.type]) {
-    const mutatedAction = sideEffects[action.type](dispatch, action);
+const createSchedulerMiddleware = <
+  S extends ISchedulerState
+>(): IMiddleware<S> => (context) => (next) => (action) => {
+  if (sideEffects<S>()[action.type]) {
+    const mutatedAction = sideEffects<S>()[action.type](context, action);
     return next(mutatedAction || action);
   }
   return next(action);
 };
 
-export default schedulerMiddleware;
+export default createSchedulerMiddleware;
