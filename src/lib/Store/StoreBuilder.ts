@@ -1,4 +1,4 @@
-import type { IReducerMap, IStore } from "./Store";
+import type { IReducerMap, IStore, IStoreParameters } from "./Store";
 import Store from "./Store";
 
 interface IMixinFactory {
@@ -12,7 +12,7 @@ interface IReducerMixinFactory extends IMixinFactory {
 interface IStoreBuilder<S extends object> {
   registerInitialState(fn: IMixinFactory): void;
   registerReducerMap(fn: IReducerMixinFactory): void;
-  buildStore(): IStore<S>;
+  buildStore(params?: Omit<IStoreParameters<S>, "initialState" | "reducers">): IStore<S>;
 }
 
 function StoreBuilder<S extends object>(): IStoreBuilder<S> {
@@ -31,12 +31,12 @@ function StoreBuilder<S extends object>(): IStoreBuilder<S> {
     return mixins.reduce((ag, v) => ({ ...ag, ...v() }), {} as T);
   }
 
-  function buildStore(): IStore<S> {
+  function buildStore(params: Omit<IStoreParameters<S>, "initialState" | "reducers"> = {}): IStore<S> {
     const initialState: S = _composeMixins<S>(initialStateMixins);
     const reducers: IReducerMap<S> = _composeMixins<IReducerMap<S>>(
       reducerMixins
     );
-    return Store({initialState, reducers});
+    return Store({initialState, reducers, ...params});
   }
 
   return {
