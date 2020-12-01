@@ -1,10 +1,10 @@
-import type { IReducerMap } from "@/lib/Store/Store";
 import type { IStore } from "@/lib/Store/Store";
 import loadModules from "./module/loadModules";
 import type { IGameState } from "./module/loadModules";
 import type { ISchedulerParameters } from "@/lib/Scheduler/Scheduler";
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type { IPatientModuleLoaderParameters } from "@/lib/Patient";
+import createLoggerMiddleware from '@/lib/loggerMiddleware';
 
 interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
@@ -25,7 +25,10 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGame<P> {
   });
 
   const store = loader.Store({
-    middleware: [createSchedulerMiddleware<IGameState<P>>()],
+    middleware: [
+      createSchedulerMiddleware<IGameState<P>>(),
+      createLoggerMiddleware({ logActions: true }),
+    ],
   });
 
   const patient = loader.Patient({});
