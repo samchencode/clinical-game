@@ -1,7 +1,7 @@
 import ModuleLoadHelper from './ModuleLoadHelper';
 import type { IModuleLoadHelper } from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
-import createPatientModule from '@/lib/Patient';
+import { createPatientModule } from '@/lib/Patient';
 import { createEventModule } from '@/lib/EventManager/EventManager';
 import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient';
 

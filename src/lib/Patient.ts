@@ -46,5 +46,6 @@ function createPatientModule<P>(
   };
 }
 
-export default createPatientModule;
+export default PatientModule;
+export { createPatientModule };
 export type { IPatientModuleLoaderParameters, IPatientState };
