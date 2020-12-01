@@ -80,4 +80,4 @@ function StoreModule<S>({
 }
 
 export default StoreModule;
-export type { IStore, IReducer, IReducerMap, IAction, IStoreParameters };
+export type { IStore, IReducer, IReducerMap, IAction, IStoreParameters, IMiddleware };
