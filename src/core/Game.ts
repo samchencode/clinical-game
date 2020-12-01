@@ -4,7 +4,6 @@ import type { IGameState } from "./module/loadModules";
 import type { ISchedulerParameters } from "@/lib/Scheduler/Scheduler";
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type { IPatientModuleLoaderParameters } from "@/lib/Patient";
-import createLoggerMiddleware from '@/lib/loggerMiddleware';
 
 interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
@@ -23,7 +22,6 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
   const store = loader.Store({
     middleware: [
       createSchedulerMiddleware<IGameState<P>>(),
-      createLoggerMiddleware({ logActions: true }),
     ],
   });
 
