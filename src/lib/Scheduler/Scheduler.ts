@@ -49,4 +49,4 @@ function createSchedulerModule<S extends ISchedulerState>(): IModuleLoader<
 
 export default SchedulerModule;
 export { createSchedulerModule };
-export type { ISchedulerState };
+export type { ISchedulerState, ISchedulerParameters };
