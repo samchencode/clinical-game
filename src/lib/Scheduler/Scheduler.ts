@@ -6,7 +6,7 @@ import * as actions from "./schedulerActionTypes";
 interface IEvent {
   action: IAction;
   delayMs: number;
-  timerId?: number;
+  timerId?: NodeJS.Timeout | number;
 }
 
 interface IScheduler {}
