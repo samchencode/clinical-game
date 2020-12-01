@@ -50,9 +50,19 @@ function EventManagerModule<S>({
 export default EventManagerModule;
 export type { IEventEmitter, IEventManager };
 
+interface IEventState<S> {
+  eventHandlerMap: {
+    [key: string]: IEventHandlerContext<S>
+  }
+}
+
 const createEventModule = <S>(): IModuleLoader<IEventManager, IEventManagerParameters<S>> => ({
   load(helper) {
-    // TODO: create Store.events here
+    const initialEventState: IEventState<S> = {
+      eventHandlerMap: {}
+    }
+
+    helper.storeBuilder.registerInitialState(() => initialEventState);
     return EventManagerModule;
   },
 });
