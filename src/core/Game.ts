@@ -28,7 +28,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGame<P> {
     middleware: [createSchedulerMiddleware<IGameState<P>>()],
   });
 
-  const patient = loader.Patient();
+  const patient = loader.Patient({});
   const scheduler = loader.Scheduler({
     store,
     initialEvents: options.initialScheduledEvents,
