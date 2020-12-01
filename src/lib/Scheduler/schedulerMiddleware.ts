@@ -29,7 +29,9 @@ const setTimeoutOnEvent = (
         eventId: e.eventId,
         event: { ...e, timerId, repeat: repeat - 1 },
       };
-    } else updateSchedule.payload = e.eventId;
+    } else {
+      updateSchedule.payload = e.eventId;
+    }
 
     dispatch(scheduledAction);
     dispatch(updateSchedule);
@@ -71,8 +73,8 @@ const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
     event.timerId = setTimeoutOnEvent(dispatch, event);
     return newAction;
   },
-  [actions.CANCEL_EVENT]({ state }, { payload: eventId }) {
-    const { timerId } = state.scheduler.pendingDispatch.find(
+  [actions.CANCEL_EVENT]({ getState }, { payload: eventId }) {
+    const { timerId } = getState().scheduler.pendingDispatch.find(
       (e) => e.eventId === eventId
     );
     isNode()
