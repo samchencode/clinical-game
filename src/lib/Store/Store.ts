@@ -11,12 +11,13 @@ interface IReducerMap<S> {
   [actionType: string]: IReducer<S>;
 }
 
-interface IMiddlewareContext {
+interface IMiddlewareContext<S> {
   dispatch: (a: IAction) => void;
+  state: S;
 }
 
-interface IMiddleware {
-  (context: IMiddlewareContext): (
+interface IMiddleware<S> {
+  (context: IMiddlewareContext<S>): (
     next: (action: IAction) => IAction
   ) => (action: IAction) => IAction;
 }
@@ -30,7 +31,7 @@ interface IStore<S> {
 interface IStoreParameters<S> {
   initialState: S;
   reducers?: IReducerMap<S>;
-  middleware?: IMiddleware[];
+  middleware?: IMiddleware<S>[];
 }
 
 function StoreModule<S>({
@@ -52,9 +53,9 @@ function StoreModule<S>({
   }
 
   function _composeMiddleware(
-    middleware: IMiddleware[]
-  ): ReturnType<ReturnType<IMiddleware>> {
-    const context: IMiddlewareContext = { dispatch };
+    middleware: IMiddleware<S>[]
+  ): ReturnType<ReturnType<IMiddleware<S>>> {
+    const context: IMiddlewareContext<S> = { dispatch, state };
     return middleware.reduceRight<(a: IAction) => IAction>(
       (ag, v) => {
         const next = v(context);
