@@ -1,4 +1,4 @@
-import type { IModuleLoader } from "@/core/module/loadModules";
+import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import type { IReducerMap, IReducer } from "@/lib/Store/Store";
 import { deepClone } from "./utils";
 

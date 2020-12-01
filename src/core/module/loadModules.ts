@@ -1,14 +1,9 @@
 import ModuleLoadHelper from './ModuleLoadHelper';
-import type { IModuleLoadHelper } from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
 import { createPatientModule } from '@/lib/Patient';
 import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient';
 
 interface IGameState<P> extends IBaseGameState, IPatientState<P> {};
-
-interface IModuleLoader<M, P extends object> {
-  load(helper: IModuleLoadHelper<IGameState<unknown>>): (params?: P) => M;
-}
 
 function loadModules<P> (params: {
   patient: IPatientModuleLoaderParameters<P>
@@ -23,5 +18,5 @@ function loadModules<P> (params: {
   }
 }
 
-export type { IModuleLoader, IGameState };
+export type { IGameState };
 export default loadModules;
