@@ -8,8 +8,16 @@ interface IReducer<S> {
 }
 
 interface IReducerMap<S> {
-  [actionType: string]: IReducer<S>
+  [actionType: string]: IReducer<S>;
 }
+
+interface IMiddlewareContext {
+  dispatch: (a: IAction) => void
+}
+
+interface IMiddleware {
+  (context: IMiddlewareContext): (next: ((action: IAction) => IAction)) => ((action: IAction) => IAction)
+};
 
 interface IStore<S> {
   getState: () => S;
@@ -18,13 +26,15 @@ interface IStore<S> {
 }
 
 interface IStoreParameters<S> {
-  initialState: S,
-  reducers?: IReducerMap<S>
+  initialState: S;
+  reducers?: IReducerMap<S>;
+  middleware?: IMiddleware[];
 }
 
 function StoreModule<S>({
   initialState,
-  reducers = {}
+  reducers = {},
+  middleware = [],
 }: IStoreParameters<S>): IStore<S> {
   let state = initialState;
 
@@ -39,13 +49,26 @@ function StoreModule<S>({
     subscribers.forEach((cb) => cb(state));
   }
 
+  function _composeMiddleware(
+    middleware: IMiddleware[]
+  ): ReturnType<ReturnType<IMiddleware>> {
+    const context: IMiddlewareContext = { dispatch }
+    return middleware.reduceRight<(a: IAction) => IAction>((ag, v) => {
+      const next = v(context)
+      return next(ag);
+    }, a => a)
+  }
+  const _runMiddleware = _composeMiddleware(middleware);
+
   function getState() {
     return state;
   }
 
-  function dispatch(action: IAction) {
-    if(!reducers.hasOwnProperty(action.type)) return;
-    state = reducers[action.type](state, action.payload);
+  function dispatch(a: IAction) {
+    const action = _runMiddleware(a);
+    if (reducers.hasOwnProperty(action.type)) {
+      state = reducers[action.type](state, action.payload);
+    }
     _alertAllSubscribers(state);
   }
 
