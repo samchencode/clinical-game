@@ -13,7 +13,7 @@ interface IReducerMap<S> {
 
 interface IMiddlewareContext<S> {
   dispatch: (a: IAction) => void;
-  state: S;
+  getState: () => S;
 }
 
 interface IMiddleware<S> {
@@ -55,7 +55,7 @@ function StoreModule<S>({
   function _composeMiddleware(
     middleware: IMiddleware<S>[]
   ): ReturnType<ReturnType<IMiddleware<S>>> {
-    const context: IMiddlewareContext<S> = { dispatch, state };
+    const context: IMiddlewareContext<S> = { dispatch, getState };
     return middleware.reduceRight<(a: IAction) => IAction>(
       (ag, v) => {
         const next = v(context);
