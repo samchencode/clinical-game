@@ -1,0 +1,53 @@
+import type { IModuleLoader } from "@/core/module/ModuleLoader";
+import type { IStore } from "@/lib/Store/Store";
+import * as actions from "./scribeActions";
+import scribeReducer from './scribeReducers';
+
+interface IScript {
+  type: "text" | "image";
+  data: string;
+}
+
+interface IScribeState {
+  scripts: IScript[];
+}
+const initialState: IScribeState = { scripts: [] }
+
+interface IScribeModuleParameters<S extends IScribeState> {
+  store: IStore<S>
+}
+
+interface IScribe {
+  text: (s: string) => void;
+  image: (url: string) => void;
+  getScripts: () => IScript[];
+}
+
+function ScribeModule<S extends IScribeState>({ store }: IScribeModuleParameters<S>): IScribe {
+  const _writeLine = (type: string) => (data: string) =>
+    store.dispatch({ type: actions.WRITE_LINE, payload: { type, data } });
+
+  function getScripts(): IScript[] {
+    return store.getState().scripts;
+  }
+
+  return {
+    text: _writeLine("text"),
+    image: _writeLine("image"),
+    getScripts,
+  };
+}
+
+function createScribeModule<S extends IScribeState> (): IModuleLoader<IScribe, IScribeModuleParameters<S>> {
+  return {
+    load: (helper) => {
+      helper.storeBuilder.registerInitialState(() => initialState);
+      helper.storeBuilder.registerReducerMap(() => scribeReducer);
+      return ScribeModule;
+    }
+  }
+}
+
+export default ScribeModule;
+export type { IScribeState };
+export { createScribeModule };
