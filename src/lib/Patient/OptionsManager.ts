@@ -1,8 +1,7 @@
 import type { IStore } from "@/lib/Store/Store";
 import type { IScheduler } from "@/lib/Scheduler/Scheduler";
 import type { IPatientState } from "./Patient";
-
-// if option is strategy then, what's context?
+import { IViewable, IViewVisitor } from '@/lib/View/View';
 
 interface IOptionParameters<P> {
   name: string;
@@ -13,16 +12,17 @@ interface IOptionParameters<P> {
   ) => void;
 }
 
-interface IOption<P> extends IOptionParameters<P> {
+interface IOption<P> extends IOptionParameters<P>, IViewable  {
   select: () => void;
-  display: any; // TODO: make this accept a View.Visitor
 }
 
 function OptionFactory<P>(dispatch: IStore<unknown>["dispatch"], scheduler: IScheduler, params: IOptionParameters<P>): IOption<P> {
+  const select = params.execute.bind(null, dispatch, scheduler);
+  
   return {
     ...params,
-    select: params.execute.bind(null, dispatch, scheduler),
-    display: null,
+    select,
+    view: (visitor) => { visitor.displayOption(params.name, select) },
   };
 }
 
