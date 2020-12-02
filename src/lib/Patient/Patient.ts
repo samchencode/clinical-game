@@ -1,8 +1,8 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import type { IReducerMap, IReducer, IStore } from "@/lib/Store/Store";
 import type { IScheduler } from "@/lib/Scheduler/Scheduler";
-import type { IOption, IOptionParameters } from "./Option";
-import createOptionFactory from "./Option";
+import type { IOption, IOptionParameters } from "./OptionsManager";
+import OptionsManager from "./OptionsManager";
 import { deepClone } from "../utils";
 
 interface IPatient<P> {
@@ -29,19 +29,13 @@ function PatientModule<P, S extends IPatientState<P>>({
   scheduler,
   options: optionParams = [],
 }: IPatientModuleParameters<P, S>): IPatient<P> {
+  const optionsManager = OptionsManager<P, S>({
+    dispatch: store.dispatch,
+    scheduler,
+    options: optionParams,
+  });
 
-  // TODO: consider separating Options into a separate module that is imported by Patient
-  // If minimal store dependency, then the view class can import it too
-  const OptionFactory = createOptionFactory(store.dispatch, scheduler);
-  const options = optionParams.map(OptionFactory);
-
-  function getOptions() {
-    return options.filter((o) => o.isAvailable(store.getState().patient));
-  }
-
-  return {
-    getOptions,
-  };
+  return { getOptions: optionsManager.getOptions.bind(null, store) };
 }
 
 const _makePatientStateReducers = <P>(
