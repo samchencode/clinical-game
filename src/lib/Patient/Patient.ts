@@ -29,6 +29,9 @@ function PatientModule<P, S extends IPatientState<P>>({
   scheduler,
   options: optionParams = [],
 }: IPatientModuleParameters<P, S>): IPatient<P> {
+
+  // TODO: consider separating Options into a separate module that is imported by Patient
+  // If minimal store dependency, then the view class can import it too
   const OptionFactory = createOptionFactory(store.dispatch, scheduler);
   const options = optionParams.map(OptionFactory);
 
