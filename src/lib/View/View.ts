@@ -1,5 +1,4 @@
 import type { IStore } from '@/lib/Store/Store';
-import type { IOption } from '@/lib/Patient/OptionsManager';
 
 interface AbstractViewModuleParameters<S> {
   store: IStore<S>
