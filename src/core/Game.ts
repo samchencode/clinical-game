@@ -1,4 +1,3 @@
-import type { IStore } from "@/lib/Store/Store";
 import loadModules from "./module/loadModules";
 import type { IGameState } from "./module/loadModules";
 import type { ISchedulerParameters } from "@/lib/Scheduler/Scheduler";
@@ -18,12 +17,11 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
       reducers: options.patientReducers,
     },
   });
-
   const store = loader.Store({
-    middleware: [
-      createSchedulerMiddleware<IGameState<P>>(),
-    ],
+    middleware: [createSchedulerMiddleware<IGameState<P>>()],
   });
+
+  const scribe = loader.Scribe({ store });
 
   const scheduler = loader.Scheduler({
     store,
@@ -32,13 +30,12 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
 
   const patient = loader.Patient({ store, scheduler });
 
-
   return {
     store,
     scheduler,
     patient,
+    scribe,
   };
 }
 
 export default AbstractGameModule;
-
