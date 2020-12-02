@@ -65,5 +65,5 @@ function createScribeModule<S extends IScribeState> (): IModuleLoader<IScribe, I
 }
 
 export default ScribeModule;
-export type { IScribeState };
+export type { IScribeState, IScribe };
 export { createScribeModule };
