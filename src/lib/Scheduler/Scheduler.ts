@@ -10,6 +10,7 @@ interface IScheduler {
   scheduleEvent: (params: IEventParameters) => IEvent;
   cancelEvent: (eventId: string) => void;
 }
+
 interface ISchedulerParameters<S> {
   store: IStore<S>;
   initialEvents?: IEventParameters[];
@@ -73,4 +74,4 @@ function createSchedulerModule<S extends ISchedulerState>(): IModuleLoader<
 
 export default SchedulerModule;
 export { createSchedulerModule };
-export type { ISchedulerState, ISchedulerParameters };
+export type { ISchedulerState, ISchedulerParameters, IScheduler };

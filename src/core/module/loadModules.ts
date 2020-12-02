@@ -1,9 +1,9 @@
 import ModuleLoadHelper from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
-import { createPatientModule } from '@/lib/Patient';
+import { createPatientModule } from '@/lib/Patient/Patient';
 import { createSchedulerModule } from '@/lib/Scheduler/Scheduler';
 import type { ISchedulerState } from '@/lib/Scheduler/Scheduler';
-import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient';
+import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient/Patient';
 
 interface IGameState<P> extends IBaseGameState, IPatientState<P>, ISchedulerState {};
 
