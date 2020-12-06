@@ -18,7 +18,7 @@ function ConsoleAgent(): IViewAgent {
     if(Number.parseInt(input, 10) !== NaN) {
       const optNum = Number.parseInt(input, 10);
       const option = options[optNum - 1]
-      if(option.cb) option.cb();
+      if(option) option.cb();
     }
     rl.prompt();
   });
