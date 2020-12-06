@@ -4,7 +4,7 @@ import type { IScribe } from "@/lib/Scribe/Scribe";
 import ConsoleAgent from "./Console";
 import VueAgent from "./Vue";
 
-interface ViewModuleParameters<S> {
+interface IViewModuleParameters<S> {
   store: IStore<S>;
   patient: IPatient<unknown>;
   scribe: IScribe;
@@ -12,7 +12,9 @@ interface ViewModuleParameters<S> {
   vueInstance?: any;
 }
 
-function ViewModule<S>(params: ViewModuleParameters<S>) {
+interface IView {}
+
+function ViewModule<S>(params: IViewModuleParameters<S>): IView {
   let agent: IViewAgent;
 
   if (params.agent === "console") {
@@ -31,6 +33,8 @@ function ViewModule<S>(params: ViewModuleParameters<S>) {
     lines.forEach((l) => l.view(visitor));
     options.forEach((l) => l.view(visitor));
   });
+
+  return {}
 }
 
 interface IViewAgent {
