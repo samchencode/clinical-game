@@ -16,6 +16,7 @@ interface IOption<P> extends IOptionParameters<P>, IViewable  {
   select: () => void;
 }
 
+// TODO: gameContext should include more than scheduler, scribe would also be useful
 function OptionFactory<P>(dispatch: IStore<unknown>["dispatch"], scheduler: IScheduler, params: IOptionParameters<P>): IOption<P> {
   const select = params.execute.bind(null, dispatch, scheduler);
   

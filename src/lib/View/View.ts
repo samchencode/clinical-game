@@ -17,7 +17,9 @@ interface IView {}
 function ViewModule<S>(params: IViewModuleParameters<S>): IView {
   let agent: IViewAgent;
 
-  if (params.agent === "console") {
+  if(agent === null) {
+    return {};
+  } else if (params.agent === "console") {
     agent = ConsoleAgent();
   } else if (params.agent === "vue") {
     agent = VueAgent(/* May add vue instance here */);

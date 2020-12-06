@@ -10,7 +10,7 @@ const createLoggerMiddleware = (
 ): IMiddleware<unknown> => (context) => (next) => (action) => {
   const log = [];
   params.logActions && log.push(action);
-  params.logState && log.push(context.state);
+  params.logState && log.push(context.getState());
 
   console.log("Logger: ", ...log);
   return next(action);
