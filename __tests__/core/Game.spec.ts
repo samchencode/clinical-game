@@ -3,14 +3,16 @@ import Game from "@/core/Game";
 describe("Abstract Game Bridge", () => {
   it("instantiates empty Game context", () => {
     const game = Game({
-      initialPatientState: 0,
+            viewAgent: null,
+            initialPatientState: 0,
     });
     expect(game).toBeInstanceOf(Object);
   });
 
   it("accepts patientState and reducers to initialize gameState", () => {
     const game = Game({
-      initialPatientState: 0,
+            viewAgent: null,
+            initialPatientState: 0,
       patientReducers: {
         ADD: (state: number, payload: number) => state + payload,
       },
@@ -21,7 +23,8 @@ describe("Abstract Game Bridge", () => {
 
   it("accepts a scheduled event and run an action after timer", (done) => {
     const game = Game({
-      initialPatientState: 0,
+            viewAgent: null,
+            initialPatientState: 0,
       patientReducers: {
         DONE: s => !done() && s
       },
