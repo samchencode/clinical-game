@@ -71,4 +71,4 @@ function createPatientModule<P, S extends IPatientState<P>>(
 
 export default PatientModule;
 export { createPatientModule };
-export type { IPatientModuleLoaderParameters, IPatientState, IPatient };
+export type { IPatientModuleLoaderParameters, IPatientModuleParameters, IPatientState, IPatient };
