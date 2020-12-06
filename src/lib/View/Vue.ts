@@ -1,10 +1,7 @@
-import { IViewStrategy, IViewVisitor } from './View';
+import { IViewAgent } from './View';
 
-function VueViewVisitor(): IViewVisitor {
+function VueAgent(): IViewAgent {
   return null;
 }
 
-const usesVue: IViewStrategy = (options, lines) => {
-  // holds an instance of VueViewVisitor probably...
-  const visitor = VueViewVisitor();
-}
+export default VueAgent

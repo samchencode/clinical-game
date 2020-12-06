@@ -1,7 +1,7 @@
 import type { IStore } from "@/lib/Store/Store";
 import type { IScheduler } from "@/lib/Scheduler/Scheduler";
 import type { IPatientState } from "./Patient";
-import { IViewable, IViewVisitor } from '@/lib/View/View';
+import { IViewable } from '@/lib/View/View';
 
 interface IOptionParameters<P> {
   name: string;

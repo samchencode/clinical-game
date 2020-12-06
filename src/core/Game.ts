@@ -3,11 +3,13 @@ import type { IGameState } from "./module/loadModules";
 import type { ISchedulerParameters } from "@/lib/Scheduler/Scheduler";
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type { IPatientModuleLoaderParameters } from "@/lib/Patient/Patient";
+import View from "@/lib/View/View";
 
 interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
+  viewAgent: "vue" | "console";
 }
 
 function AbstractGameModule<P>(options: IGameOptions<P>) {
@@ -30,11 +32,14 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
 
   const patient = loader.Patient({ store, scheduler });
 
+  const view = View({ patient, store, scribe, agent: options.viewAgent });
+
   return {
     store,
     scheduler,
     patient,
     scribe,
+    view,
   };
 }
 

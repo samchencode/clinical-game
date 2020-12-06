@@ -2,7 +2,7 @@ import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import type { IStore } from "@/lib/Store/Store";
 import * as actions from "./scribeActions";
 import scribeReducer from './scribeReducers';
-import { IViewable, IViewVisitor } from '@/lib/View/View';
+import { IViewable, IViewableVisitor } from '@/lib/View/View';
 
 interface IScript extends IViewable {
   type: "text" | "image";
@@ -22,10 +22,11 @@ interface IScribe {
   text: (s: string) => void;
   image: (url: string) => void;
   getScripts: () => IScript[];
+  getLatestScript: () => IScript;
 }
 
 function Script(data: Omit<IScript, "view">) {
-  let view: (v: IViewVisitor) => void;
+  let view: (v: IViewableVisitor) => void;
   if(data.type === 'text') {
     view = function(visitor) {
       visitor.displayText(data.data);
@@ -47,10 +48,17 @@ function ScribeModule<S extends IScribeState>({ store }: IScribeModuleParameters
     return scriptData.map(Script);
   }
 
+  function getLatestScript(): IScript {
+    return Script(
+      store.getState().scripts.slice(-1)[0],
+    )
+  }
+
   return {
     text: _writeLine("text"),
     image: _writeLine("image"),
     getScripts,
+    getLatestScript,
   };
 }
 
