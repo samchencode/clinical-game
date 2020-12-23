@@ -14,24 +14,23 @@ interface ICondition<S> {
   invoke: (state: S, dispatch: IStore<S>["dispatch"]) => void;
 }
 
-function ConditionMonitorModule<S>(
-  params: IConditionMonitorParameters<S>
-): IConditionMonitor {
-  const { store, conditions } = params;
-
+function ConditionMonitorModule<S>({
+  store,
+  conditions = [],
+}: IConditionMonitorParameters<S>): IConditionMonitor {
   function _checkAll(newState: S) {
-    for(const condition of conditions) {
-      if(condition.check(newState)) {
+    for (const condition of conditions) {
+      if (condition.check(newState)) {
         condition.invoke(newState, store.dispatch);
       }
     }
   }
 
-  _checkAll(store.getState())
+  _checkAll(store.getState());
 
   store.subscribe((newState) => {
     _checkAll(newState);
-  })
+  });
 
   return {};
 }
