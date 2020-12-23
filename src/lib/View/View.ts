@@ -57,4 +57,4 @@ interface IViewable {
 }
 
 export default ViewModule;
-export type { IViewable, IViewAgent, IViewableVisitor };
+export type { IViewable, IViewAgent, IViewableVisitor, IViewModuleParameters };

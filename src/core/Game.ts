@@ -7,16 +7,17 @@ import type {
   IPatientModuleParameters,
 } from "@/lib/Patient/Patient";
 import View from "@/lib/View/View";
+import type { IViewModuleParameters } from '@/lib/View/View';
 import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
 import type { IConditionalMonitorParameters } from "@/lib/Conditional/ConditionalMonitor";
 
 interface IGameOptions<P> {
+  viewAgent: IViewModuleParameters<IGameState<P>>['viewAgent'];
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   patientOptions?: IPatientModuleParameters<P, IGameState<P>>["options"];
   initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
   conditionals?: IConditionalMonitorParameters<IGameState<P>>['conditions'];
-  viewAgent: "vue" | "console";
 }
 
 function AbstractGameModule<P>(options: IGameOptions<P>) {
