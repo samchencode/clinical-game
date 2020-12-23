@@ -33,17 +33,18 @@ function ConsoleAgent(): IViewAgent {
       displayImage: (url: string) => lines.push("\tSee image at: " + url),
       displayOption: (name: string, cb: Function) => {
         options.push({ name, cb })
-      },
-      done: () => {
-        lines.forEach(l => console.log(l));
-        const optDisplay = options.map((v, k) => `${k+1}) ${v.name}`).join('\n')
-        console.log(optDisplay);
       }
     }
   }
 
   return {
     renderer: getRendererVisitor,
+    done: () => {
+      lines.forEach(l => console.log(l));
+      const optDisplay = options.map((v, k) => `${k+1}) ${v.name}`).join('\n')
+      console.log(optDisplay);
+    },
+    close: () => rl.close()
   };
 }
 

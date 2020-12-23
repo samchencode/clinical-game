@@ -12,13 +12,15 @@ interface IViewModuleParameters<S> {
   vueInstance?: any;
 }
 
-interface IView {}
+interface IView {
+  close: () => void,
+}
 
 function ViewModule<S>(params: IViewModuleParameters<S>): IView {
   let agent: IViewAgent;
 
-  if(params.viewAgent === null) {
-    return {};
+  if (params.viewAgent === null) {
+    return { close: () => {} };
   } else if (params.viewAgent === "console") {
     agent = ConsoleAgent();
   } else if (params.viewAgent === "vue") {
@@ -27,7 +29,7 @@ function ViewModule<S>(params: IViewModuleParameters<S>): IView {
     agent = params.viewAgent;
   }
 
-  params.store.subscribe(() => {
+  params.store.subscribe((newState) => {
     const visitor = agent.renderer();
 
     const options = params.patient.getOptions();
@@ -35,21 +37,22 @@ function ViewModule<S>(params: IViewModuleParameters<S>): IView {
     lines.forEach((l) => l.view(visitor));
     options.forEach((l) => l.view(visitor));
 
-    visitor.done()
+    agent.done();
   });
 
-  return {}
+  return { close: () => agent.close() };
 }
 
 interface IViewAgent {
   renderer: () => IViewableVisitor;
+  done: () => void;
+  close: () => void;
 }
 
 interface IViewableVisitor {
   displayText: (s: string) => void;
   displayImage: (url: string) => void;
   displayOption: (name: string, chooseCallback: () => void) => void;
-  done: () => void;
 }
 
 interface IViewable {

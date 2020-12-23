@@ -97,11 +97,12 @@ describe("Abstract Game Bridge", () => {
       displayText: jest.fn(),
       displayImage: jest.fn(),
       displayOption: jest.fn(),
-      done: jest.fn(),
     };
 
     const mockViewAgent: IViewAgent = {
       renderer: jest.fn(() => mockViewableVisitor),
+      done: jest.fn(),
+      close: jest.fn(),
     };
 
     const game = Game({ viewAgent: mockViewAgent, initialPatientState: 0 });
