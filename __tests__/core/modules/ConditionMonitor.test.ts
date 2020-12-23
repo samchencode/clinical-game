@@ -2,7 +2,7 @@ import Store from "@/lib/Store/Store";
 import type { IStore } from "@/lib/Store/Store";
 import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
 
-describe.only("ConditionalMonitorModule", () => {
+describe("ConditionalMonitorModule", () => {
   let store: IStore<number>;
 
   beforeEach(() => {
