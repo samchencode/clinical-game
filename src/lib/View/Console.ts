@@ -35,7 +35,7 @@ function ConsoleAgent(): IViewAgent {
         options.push({ name, cb })
       },
       done: () => {
-        lines.forEach(console.log);
+        lines.forEach(l => console.log(l));
         const optDisplay = options.map((v, k) => `${k+1}) ${v.name}`).join('\n')
         console.log(optDisplay);
       }
