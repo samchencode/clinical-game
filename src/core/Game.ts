@@ -7,15 +7,15 @@ import type {
   IPatientModuleParameters,
 } from "@/lib/Patient/Patient";
 import View from "@/lib/View/View";
-import ConditionMonitor from "@/lib/Condition/ConditionMonitor";
-import type { IConditionMonitorParameters } from "@/lib/Condition/ConditionMonitor";
+import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
+import type { IConditionalMonitorParameters } from "@/lib/Conditional/ConditionalMonitor";
 
 interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   patientOptions?: IPatientModuleParameters<P, IGameState<P>>["options"];
   initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
-  conditionals?: IConditionMonitorParameters<IGameState<P>>['conditions'];
+  conditionals?: IConditionalMonitorParameters<IGameState<P>>['conditions'];
   viewAgent: "vue" | "console";
 }
 
@@ -31,7 +31,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
     middleware: [createSchedulerMiddleware<IGameState<P>>()],
   });
 
-  const conditional = ConditionMonitor({ store, conditions: options.conditionals })
+  const conditional = ConditionalMonitor({ store, conditions: options.conditionals })
 
   const scribe = loader.Scribe({ store });
 

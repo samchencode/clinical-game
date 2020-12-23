@@ -1,23 +1,23 @@
 import type { IStore } from "@/lib/Store/Store";
 
-interface IConditionMonitor {
+interface IConditionalMonitor {
   //
 }
 
-interface IConditionMonitorParameters<S> {
+interface IConditionalMonitorParameters<S> {
   store: IStore<S>;
-  conditions: ICondition<S>[];
+  conditions: IConditional<S>[];
 }
 
-interface ICondition<S> {
+interface IConditional<S> {
   check: (state: S) => boolean;
   invoke: (state: S, dispatch: IStore<S>["dispatch"]) => void;
 }
 
-function ConditionMonitorModule<S>({
+function ConditionalMonitorModule<S>({
   store,
   conditions = [],
-}: IConditionMonitorParameters<S>): IConditionMonitor {
+}: IConditionalMonitorParameters<S>): IConditionalMonitor {
   function _checkAll(newState: S) {
     for (const condition of conditions) {
       if (condition.check(newState)) {
@@ -35,5 +35,5 @@ function ConditionMonitorModule<S>({
   return {};
 }
 
-export default ConditionMonitorModule;
-export type { IConditionMonitorParameters };
+export default ConditionalMonitorModule;
+export type { IConditionalMonitorParameters };
