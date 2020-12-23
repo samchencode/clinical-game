@@ -1,6 +1,21 @@
+function isCircular(obj: any) {
+  let isCircular: boolean = false;
+  try {
+    JSON.stringify(obj)
+  } catch(e) {
+    if(e.message.match(/(cyclic|circular)/i)) {
+      isCircular = true;
+    }
+  }
+  return isCircular;
+}
+
 export function deepClone<T, K extends keyof T>(value: T): T {
   if (typeof value !== "object") return value;
   if (value === null) return value;
+
+  // FIXME: Objects with circular references are not cloned
+  if (isCircular(value)) return value;
 
   const keys = Object.getOwnPropertyNames(value) as K[];
 
@@ -11,6 +26,7 @@ export function deepClone<T, K extends keyof T>(value: T): T {
   for (const key of keys) {
     result[key] = deepClone(value[key]);
   }
+
   return result as T;
 }
 
