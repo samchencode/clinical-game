@@ -1,10 +1,10 @@
-import Game from '@/core/Game';
+import Game from "@/core/Game";
 
 const game = Game({
-  viewAgent: 'console',
+  viewAgent: "console",
   initialPatientState: {
     name: "John Smith",
-    status: 'alive',
+    status: "alive",
     systolic: 120,
     diastolic: 80,
     respiratoryRate: 6,
@@ -13,22 +13,22 @@ const game = Game({
     atOffice: true,
   },
   patientReducers: {
-    "SEND_HOME": (state) => {
+    SEND_HOME: (state) => {
       state.atOffice = false;
       return state;
-    }
-  }, 
+    },
+  },
   initialScheduledEvents: [
     {
       action: {
         type: "WRITE_LINE",
         payload: {
           type: "text",
-          data: "John Smith comes to your office to establish care"
-        }
+          data: "John Smith comes to your office to establish care",
+        },
       },
-      delayMs: 0
-    }
+      delayMs: 0,
+    },
   ],
   patientOptions: [
     {
@@ -42,12 +42,19 @@ const game = Game({
             type: "WRITE_LINE",
             payload: {
               type: "text",
-              data: "John Smith arrived home safe and sound"
-            }
+              data: "John Smith arrived home safe and sound",
+            },
           },
-          delayMs: 250
-        })
-      }
-    }
-  ]
-})
+          delayMs: 2000,
+        });
+        scheduler.scheduleEvent({
+          action: {
+            type: "GAME_END",
+            payload: { win: true },
+          },
+          delayMs:2001,
+        });
+      },
+    },
+  ],
+});
