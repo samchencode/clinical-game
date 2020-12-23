@@ -4,7 +4,7 @@ interface IConditionMonitor {
   //
 }
 
-interface IConditionMonitorParams<S> {
+interface IConditionMonitorParameters<S> {
   store: IStore<S>;
   conditions: ICondition<S>[];
 }
@@ -15,7 +15,7 @@ interface ICondition<S> {
 }
 
 function ConditionMonitorModule<S>(
-  params: IConditionMonitorParams<S>
+  params: IConditionMonitorParameters<S>
 ): IConditionMonitor {
   const { store, conditions } = params;
 
@@ -37,3 +37,4 @@ function ConditionMonitorModule<S>(
 }
 
 export default ConditionMonitorModule;
+export type { IConditionMonitorParameters };
