@@ -40,7 +40,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>) {
     options: options.patientOptions,
   });
 
-  const view = View({ patient, store, scribe, agent: options.viewAgent });
+  const view = View({ patient, store, scribe, viewAgent: options.viewAgent });
 
   return {
     store,

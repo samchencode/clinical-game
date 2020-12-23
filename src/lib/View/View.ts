@@ -8,7 +8,7 @@ interface IViewModuleParameters<S> {
   store: IStore<S>;
   patient: IPatient<unknown>;
   scribe: IScribe;
-  agent: "console" | "vue" | IViewAgent;
+  viewAgent: "console" | "vue" | IViewAgent;
   vueInstance?: any;
 }
 
@@ -17,14 +17,14 @@ interface IView {}
 function ViewModule<S>(params: IViewModuleParameters<S>): IView {
   let agent: IViewAgent;
 
-  if(agent === null) {
+  if(params.viewAgent === null) {
     return {};
-  } else if (params.agent === "console") {
+  } else if (params.viewAgent === "console") {
     agent = ConsoleAgent();
-  } else if (params.agent === "vue") {
+  } else if (params.viewAgent === "vue") {
     agent = VueAgent(/* May add vue instance here */);
   } else {
-    agent = params.agent;
+    agent = params.viewAgent;
   }
 
   params.store.subscribe(() => {
