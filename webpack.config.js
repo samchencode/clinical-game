@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
@@ -6,6 +7,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
+  },
+  externals:{
+    "readline": "commonjs readline"
   },
   resolve: {
     extensions: ['.ts', '.js'],

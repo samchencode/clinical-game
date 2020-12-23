@@ -34,6 +34,8 @@ function ViewModule<S>(params: IViewModuleParameters<S>): IView {
     const lines = params.scribe.getScripts();
     lines.forEach((l) => l.view(visitor));
     options.forEach((l) => l.view(visitor));
+
+    visitor.done()
   });
 
   return {}

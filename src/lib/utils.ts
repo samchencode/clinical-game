@@ -1,5 +1,6 @@
 export function deepClone<T, K extends keyof T>(value: T): T {
   if (typeof value !== "object") return value;
+  if (value === null) return value;
 
   const keys = Object.getOwnPropertyNames(value) as K[];
 
@@ -21,4 +22,4 @@ export const isBrowser = new Function(
   "try {return this===window;}catch(e){return false;}"
 );
 
-export const generateRandomString = (): string => btoa(String(Math.random()).slice(2));
+export const generateRandomString = (): string => String(Math.random()).slice(2);
