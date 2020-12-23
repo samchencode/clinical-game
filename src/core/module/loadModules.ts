@@ -1,5 +1,6 @@
 import ModuleLoadHelper from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
+import createBaseGameStore from '@/core/store/gameStore';
 import { createPatientModule } from '@/lib/Patient/Patient';
 import { createSchedulerModule } from '@/lib/Scheduler/Scheduler';
 import type { ISchedulerState } from '@/lib/Scheduler/Scheduler';
@@ -14,6 +15,9 @@ function loadModules<P> (params: {
 }) {
 
   const helper = ModuleLoadHelper<IGameState<P>>();
+
+  createBaseGameStore(helper.storeBuilder);
+  
   const PatientModule = createPatientModule(params.patient);
   const SchedulerModule = createSchedulerModule<IGameState<P>>();
   const ScribeModule = createScribeModule<IGameState<P>>();
