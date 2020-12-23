@@ -1,33 +1,22 @@
-function isCircular(obj: any) {
-  let isCircular: boolean = false;
+export function deepClone<T, K extends keyof T>(value: T, seen = new WeakMap<{}, any>()): T {
+  if (typeof value !== "object" || Object(value) !== value) return value;
+  if (seen.has(value)) return seen.get(value);
+
+  let result: T;
   try {
-    JSON.stringify(obj)
-  } catch(e) {
-    if(e.message.match(/(cyclic|circular)/i)) {
-      isCircular = true;
-    }
+    result = new (value as any).constructor();
+  } catch {
+    result = Object.create(Object.getPrototypeOf(value));
   }
-  return isCircular;
-}
+  seen.set(value, result);
 
-export function deepClone<T, K extends keyof T>(value: T): T {
-  if (typeof value !== "object") return value;
-  if (value === null) return value;
-
-  // FIXME: Objects with circular references are not cloned
-  if (isCircular(value)) return value;
-
-  const keys = Object.getOwnPropertyNames(value) as K[];
-
-  let result: { [key in K]: T[K] } = Array.isArray(value)
-    ? Array()
-    : Object.create({});
+  const keys = Object.keys(value) as K[];
 
   for (const key of keys) {
-    result[key] = deepClone(value[key]);
+    result[key] = deepClone(value[key], seen);
   }
 
-  return result as T;
+  return result;
 }
 
 export const isNode = new Function(
