@@ -1,9 +1,9 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import type { IReducerMap, IReducer, IStore } from "@/lib/Store/Store";
-import type { IScheduler } from "@/lib/Scheduler/Scheduler";
 import type { IOption, IOptionParameters } from "./OptionsManager";
 import OptionsManager from "./OptionsManager";
 import { deepClone } from "../utils";
+import type { IGameContext } from "@/core/Game";
 
 interface IPatient<P> {
   getOptions: () => IOption<P>[];
@@ -13,9 +13,8 @@ interface IPatientState<P> {
   patient: P;
 }
 
-interface IPatientModuleParameters<P, S extends IPatientState<P>> {
-  store: IStore<S>;
-  scheduler: IScheduler;
+interface IPatientModuleParameters<P> {
+  context: Partial<IGameContext<P>>;
   options?: IOptionParameters<P>[];
 }
 
@@ -24,18 +23,21 @@ interface IPatientModuleLoaderParameters<P> {
   reducers: IReducerMap<P>;
 }
 
-function PatientModule<P, S extends IPatientState<P>>({
-  store,
-  scheduler,
+function PatientModule<P>({
   options: optionParams = [],
-}: IPatientModuleParameters<P, S>): IPatient<P> {
-  const optionsManager = OptionsManager<P, S>({
-    dispatch: store.dispatch,
-    scheduler,
+  context,
+}: IPatientModuleParameters<P>): IPatient<P> {
+  const optionsManager = OptionsManager<P>({
+    context,
     options: optionParams,
   });
 
-  return { getOptions: optionsManager.getOptions.bind(null, store) };
+  return {
+    getOptions: optionsManager.getOptions.bind(
+      null,
+      context.store.getState().patient
+    ),
+  };
 }
 
 const _makePatientStateReducers = <P>(
@@ -52,9 +54,9 @@ const _makePatientStateReducers = <P>(
     {}
   );
 
-function createPatientModule<P, S extends IPatientState<P>>(
+function createPatientModule<P>(
   params: IPatientModuleLoaderParameters<P>
-): IModuleLoader<IPatient<P>, IPatientModuleParameters<P, S>> {
+): IModuleLoader<IPatient<P>, IPatientModuleParameters<P>> {
   return {
     load(helper) {
       helper.storeBuilder.registerInitialState(() => ({
@@ -71,4 +73,9 @@ function createPatientModule<P, S extends IPatientState<P>>(
 
 export default PatientModule;
 export { createPatientModule };
-export type { IPatientModuleLoaderParameters, IPatientModuleParameters, IPatientState, IPatient };
+export type {
+  IPatientModuleLoaderParameters,
+  IPatientModuleParameters,
+  IPatientState,
+  IPatient,
+};

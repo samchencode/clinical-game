@@ -1,16 +1,17 @@
 import Store from "@/lib/Store/Store";
 import type { IStore, IReducerMap } from "@/lib/Store/Store";
 import PatientModule from "@/lib/Patient/Patient";
-import type { IPatientState } from "@/lib/Patient/Patient";
 import Scheduler from "@/lib/Scheduler/Scheduler";
-import { ISchedulerState, IScheduler } from "@/lib/Scheduler/Scheduler";
+import { IScheduler } from "@/lib/Scheduler/Scheduler";
+import type { IGameContext, IGameState } from "@/core/Game";
 
 let initialPatientState = {
   name: "Alex",
 };
 
 type PS = typeof initialPatientState;
-type State = {} & IPatientState<PS> & ISchedulerState;
+type State = IGameState<PS>;
+type Context = Partial<IGameContext<PS>>;
 
 let patientReducers: IReducerMap<State> = {
   CHANGE_NAME_TO_DEREK(state) {
@@ -21,6 +22,7 @@ let patientReducers: IReducerMap<State> = {
 
 let store: IStore<State>;
 let scheduler: IScheduler;
+let context: Context;
 beforeEach(() => {
   store = Store<State>({
     initialState: {
@@ -28,16 +30,19 @@ beforeEach(() => {
       scheduler: {
         pendingDispatch: [],
       },
+      status: null,
+      scripts: null,
     },
     reducers: patientReducers,
   });
 
-  scheduler = Scheduler({ store });
+  scheduler = Scheduler({ store, context });
+  context = { store, scheduler };
 });
 
 describe("PatientModule", () => {
   it("creates a patientModule without options", () => {
-    const patient = PatientModule({ store, scheduler });
+    const patient = PatientModule({ context });
     expect(patient).not.toBeFalsy();
     expect(patient).toHaveProperty("getOptions");
     expect(patient.getOptions()).toEqual([]);
@@ -47,16 +52,15 @@ describe("PatientModule", () => {
   const option = {
     name: "CHANGE_NAME_TO_DEREK",
     isAvailable: (s: PS) => s.name !== "Derek",
-    execute: (dispatch: any, scheduler: any) => {
+    execute: (context: Context) => {
       mock();
-      dispatch({ type: "CHANGE_NAME_TO_DEREK" });
+      context.store.dispatch({ type: "CHANGE_NAME_TO_DEREK" });
     },
   };
 
   it("creates a patientModule with option: change name", () => {
-    const patient = PatientModule<PS, State>({
-      store,
-      scheduler,
+    const patient = PatientModule<PS>({
+      context,
       options: [option],
     });
     expect(patient.getOptions()[0]).toHaveProperty(
@@ -67,9 +71,8 @@ describe("PatientModule", () => {
 
   it("dispatches action on option.select", () => {
     mock.mockClear();
-    const patient = PatientModule<PS, State>({
-      store,
-      scheduler,
+    const patient = PatientModule<PS>({
+      context,
       options: [option],
     });
     patient.getOptions()[0].select();
@@ -80,18 +83,16 @@ describe("PatientModule", () => {
     const myOpt = { ...option }
     myOpt.isAvailable = () => false;
 
-    const patient = PatientModule<PS, State>({
-      store,
-      scheduler,
+    const patient = PatientModule<PS>({
+      context,
       options: [myOpt],
     });
     expect(patient.getOptions()).toEqual([]);
   });
 
   it("hides options that were once available if state changes", () => {
-    const patient = PatientModule<PS, State>({
-      store,
-      scheduler,
+    const patient = PatientModule<PS>({
+      context,
       options: [option],
     });
     patient.getOptions()[0].select();

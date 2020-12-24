@@ -4,6 +4,7 @@ import schedulerReducers from "./schedulerReducers";
 import * as actions from "./schedulerActionTypes";
 import { IEventParameters, IEvent } from "./Event";
 import Event from "./Event";
+import type { IGameContext } from "@/core/Game";
 
 interface IScheduler {
   getPendingEvents: () => IEvent[];
@@ -14,6 +15,7 @@ interface IScheduler {
 interface ISchedulerParameters<S> {
   store: IStore<S>;
   initialEvents?: IEventParameters[];
+  context: Partial<IGameContext<unknown>>;
 }
 
 interface ISchedulerState {

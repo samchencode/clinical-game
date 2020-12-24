@@ -1,4 +1,5 @@
 import type { IStore } from "@/lib/Store/Store";
+import type { IGameContext } from "@/core/Game";
 
 interface IConditionalMonitor {
   //
@@ -7,6 +8,7 @@ interface IConditionalMonitor {
 interface IConditionalMonitorParameters<S> {
   store: IStore<S>;
   conditions: IConditional<S>[];
+  context: IGameContext<unknown>;
 }
 
 interface IConditional<S> {
@@ -36,4 +38,4 @@ function ConditionalMonitorModule<S>({
 }
 
 export default ConditionalMonitorModule;
-export type { IConditionalMonitorParameters };
+export type { IConditionalMonitorParameters, IConditionalMonitor };

@@ -1,15 +1,17 @@
 import Scribe from "@/lib/Scribe/Scribe";
-import type { IScribeState } from "@/lib/Scribe/Scribe";
 import scribeReducers from "@/lib/Scribe/scribeReducers";
 import Store from "@/lib/Store/Store";
-import type { IStore } from "@/lib/Store/Store";
+import type { IStore, IReducerMap } from "@/lib/Store/Store";
+import type { IGameContext, IGameState } from "@/core/Game";
 
-let store: IStore<IScribeState>;
+type State = IGameState<unknown>
+
+let store: IStore<State>;
 
 beforeEach(() => {
-  store = Store<IScribeState>({
-    initialState: { scripts: [] },
-    reducers: scribeReducers,
+  store = Store<State>({
+    initialState: { scripts: [] } as State,
+    reducers: scribeReducers as IReducerMap<State>,
   });
 });
 

@@ -1,51 +1,48 @@
-import type { IStore } from "@/lib/Store/Store";
-import type { IScheduler } from "@/lib/Scheduler/Scheduler";
-import type { IPatientState } from "./Patient";
-import { IViewable } from '@/lib/View/View';
+import { IViewable } from "@/lib/View/View";
+import type { IGameContext } from "@/core/Game";
+import type { IExecutable } from "@/lib/Executable";
 
-interface IOptionParameters<P> {
+interface IOptionParameters<P> extends IExecutable<P> {
   name: string;
   isAvailable: (patientState: P) => boolean;
-  execute: (
-    dispatch: IStore<unknown>["dispatch"],
-    scheduler: IScheduler
-  ) => void;
 }
 
-interface IOption<P> extends IOptionParameters<P>, IViewable  {
+interface IOption<P> extends IOptionParameters<P>, IViewable {
   select: () => void;
 }
 
-// TODO: gameContext should include more than scheduler, scribe would also be useful
-function OptionFactory<P>(dispatch: IStore<unknown>["dispatch"], scheduler: IScheduler, params: IOptionParameters<P>): IOption<P> {
-  const select = params.execute.bind(null, dispatch, scheduler);
-  
+function OptionFactory<P>(
+  context: Partial<IGameContext<P>>,
+  params: IOptionParameters<P>
+): IOption<P> {
+  const select = params.execute.bind(null, context);
+
   return {
     ...params,
     select,
-    view: (visitor) => { visitor.displayOption(params.name, select) },
+    view: (visitor) => {
+      visitor.displayOption(params.name, select);
+    },
   };
 }
 
-interface OptionManager<P, S extends IPatientState<P>> {
-  getOptions: (store: IStore<S>) => IOption<P>[];
+interface OptionManager<P> {
+  getOptions: (patientState: P) => IOption<P>[];
 }
 
 interface OptionManagerParameters<P> {
   options: IOptionParameters<P>[];
-  dispatch: IStore<unknown>["dispatch"];
-  scheduler: IScheduler;
+  context: Partial<IGameContext<P>>;
 }
 
-function OptionsManager<P, S extends IPatientState<P>>({
-  dispatch,
-  scheduler,
+function OptionsManager<P>({
+  context,
   options: optionParams,
-}: OptionManagerParameters<P>): OptionManager<P, S> {
-  const options = optionParams.map(param => OptionFactory(dispatch, scheduler, param));
+}: OptionManagerParameters<P>): OptionManager<P> {
+  const options = optionParams.map((param) => OptionFactory(context, param));
 
-  function getOptions(store: IStore<S>) {
-    return options.filter((o) => o.isAvailable(store.getState().patient));
+  function getOptions(patient: P) {
+    return options.filter((o) => o.isAvailable(patient));
   }
 
   return { getOptions };
