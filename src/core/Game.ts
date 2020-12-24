@@ -4,6 +4,7 @@ import type {
   IScheduler,
   ISchedulerParameters,
 } from "@/lib/Scheduler/Scheduler";
+import createEventFactory from '@/lib/Scheduler/Event';
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type {
   IPatientModuleLoaderParameters,
@@ -27,13 +28,13 @@ interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   patientOptions?: IPatientModuleParameters<P>["options"];
-  initialScheduledEvents?: ISchedulerParameters["initialEvents"];
+  initialScheduledEvents?: ISchedulerParameters<P>["initialEvents"];
   conditionals?: IConditionalMonitorParameters<P>["conditions"];
 }
 
 interface IGameContext<P> {
   store: IStore<IGameState<P>>;
-  scheduler: IScheduler;
+  scheduler: IScheduler<P>;
   patient: IPatient<P>;
   scribe: IScribe;
   view: IView;
@@ -57,8 +58,10 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     },
   });
 
+  const { factory: eventFactory, getEventCallback } = createEventFactory(gameContext);
+
   gameContext.store = loader.Store({
-    middleware: [createSchedulerMiddleware<IGameState<P>>()],
+    middleware: [createSchedulerMiddleware<IGameState<P>>(getEventCallback)],
   });
 
   gameContext.conditional = ConditionalMonitor({
@@ -71,6 +74,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   gameContext.scheduler = loader.Scheduler({
     initialEvents: options.initialScheduledEvents,
     context: gameContext,
+    eventFactory,
   });
 
   gameContext.patient = loader.Patient({

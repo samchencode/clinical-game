@@ -22,14 +22,17 @@ describe("Abstract Game Bridge", () => {
     expect(game.store.getState().patient).toBe(0);
   });
 
-  it("accepts a scheduled event and run an action after timer", (done) => {
+  it("accepts a scheduled event and runs an action after timer", (done) => {
+    const dispatchTestAction = (_: unknown, ctx: any) =>
+      ctx.store.dispatch({ type: "DONE" });
+
     const game = Game({
       viewAgent: null,
       initialPatientState: 0,
       patientReducers: {
         DONE: (s) => !done() && s,
       },
-      initialScheduledEvents: [{ action: { type: "DONE" }, delayMs: 0 }],
+      initialScheduledEvents: [{ execute: dispatchTestAction, delayMs: 0 }],
     });
   });
 
@@ -108,8 +111,8 @@ describe("Abstract Game Bridge", () => {
     const game = Game({ viewAgent: mockViewAgent, initialPatientState: 0 });
 
     expect(mockViewableVisitor.displayText).not.toHaveBeenCalled();
-    game.scribe.text('Hello World');
+    game.scribe.text("Hello World");
     expect(mockViewableVisitor.displayText).toHaveBeenCalledTimes(1);
-    expect(mockViewableVisitor.displayText).toHaveBeenCalledWith('Hello World');
+    expect(mockViewableVisitor.displayText).toHaveBeenCalledWith("Hello World");
   });
 });

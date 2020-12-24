@@ -2,18 +2,18 @@ import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import schedulerReducers from "./schedulerReducers";
 import * as actions from "./schedulerActionTypes";
 import { IEventParameters, IEvent } from "./Event";
-import Event from "./Event";
 import type { IGameContext } from "@/core/Game";
 
-interface IScheduler {
+interface IScheduler<P> {
   getPendingEvents: () => IEvent[];
-  scheduleEvent: (params: IEventParameters) => IEvent;
-  cancelEvent: (eventId: string) => void;
+  scheduleEvent: (params: IEventParameters<P>) => IEvent;
+  cancelEvent: (eventId: IEvent['eventId']) => void;
 }
 
-interface ISchedulerParameters {
-  initialEvents?: IEventParameters[];
-  context: Partial<IGameContext<unknown>>;
+interface ISchedulerParameters<P> {
+  initialEvents?: IEventParameters<P>[];
+  context: Partial<IGameContext<P>>;
+  eventFactory: (params: IEventParameters<P>) => IEvent;
 }
 
 interface ISchedulerState {
@@ -28,15 +28,15 @@ const initialSchedulerState: ISchedulerState = {
   },
 };
 
-function SchedulerModule(
-  {initialEvents, context}: ISchedulerParameters
-): IScheduler {
+function SchedulerModule<P>(
+  {initialEvents, context, eventFactory}: ISchedulerParameters<P>
+): IScheduler<P> {
   const { store } = context;
 
   if (initialEvents) {
     store.dispatch({
       type: actions.REGISTER_EVENT,
-      payload: initialEvents.map(Event),
+      payload: initialEvents.map(eventFactory),
     });
   }
 
@@ -44,8 +44,8 @@ function SchedulerModule(
     return store.getState().scheduler.pendingDispatch;
   }
 
-  function scheduleEvent(e: IEventParameters) {
-    const event = Event(e);
+  function scheduleEvent(e: IEventParameters<P>) {
+    const event = eventFactory(e);
     store.dispatch({ type: actions.REGISTER_EVENT, payload: event });
     return event;
   }
@@ -62,8 +62,8 @@ function SchedulerModule(
 }
 
 function createSchedulerModule<S extends ISchedulerState>(): IModuleLoader<
-  IScheduler,
-  ISchedulerParameters
+  IScheduler<unknown>,
+  ISchedulerParameters<unknown>
 > {
   return {
     load(helper) {

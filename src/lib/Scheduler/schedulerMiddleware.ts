@@ -17,9 +17,10 @@ interface SideEffectMap<S extends ISchedulerState> {
 
 const setTimeoutOnEvent = (
   dispatch: IMiddlewareContext<unknown>["dispatch"],
-  e: IEvent
+  e: IEvent,
+  getEventCallback: (id: string) => () => void,
 ): NodeJS.Timeout | number => {
-  const { action: scheduledAction, delayMs, repeat } = e;
+  const { /* action: scheduledAction, */ delayMs, repeat } = e;
   const timerId = setTimeout(() => {
     const updateSchedule: IAction = {
       type: repeat > 0 ? actions.REPEAT_EVENT : actions.STALE_EVENT,
@@ -32,16 +33,16 @@ const setTimeoutOnEvent = (
     } else {
       updateSchedule.payload = e.eventId;
     }
-
-    dispatch(scheduledAction);
+    const cb = getEventCallback(e.eventId);
+    cb();
     dispatch(updateSchedule);
   }, delayMs);
   return timerId;
 };
 
-const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
+const sideEffects = <S extends ISchedulerState>(getEventCallback: (id: string) => () => void): SideEffectMap<S> => ({
   [actions.REGISTER_EVENT](
-    { dispatch },
+    storeContext,
     action: {
       payload: IEvent | IEvent[];
     } & IAction
@@ -51,14 +52,14 @@ const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
       const events = newAction.payload;
       const newEvents = events.map((e) => ({
         ...e,
-        timerId: setTimeoutOnEvent(dispatch, e),
+        timerId: setTimeoutOnEvent(storeContext.dispatch, e, getEventCallback),
       }));
       newAction.payload = newEvents;
     } else {
       const event = newAction.payload;
       const newEvent = {
         ...event,
-        timerId: setTimeoutOnEvent(dispatch, event),
+        timerId: setTimeoutOnEvent(storeContext.dispatch, event, getEventCallback),
       };
       newAction.payload = newEvent;
     }
@@ -70,7 +71,7 @@ const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
   ) {
     const newAction = deepClone(action);
     const { event } = newAction.payload;
-    event.timerId = setTimeoutOnEvent(dispatch, event);
+    event.timerId = setTimeoutOnEvent(dispatch, event, getEventCallback);
     return newAction;
   },
   [actions.CANCEL_EVENT]({ getState }, { payload: eventId }) {
@@ -85,9 +86,10 @@ const sideEffects = <S extends ISchedulerState>(): SideEffectMap<S> => ({
 
 const createSchedulerMiddleware = <
   S extends ISchedulerState
->(): IMiddleware<S> => (context) => (next) => (action) => {
-  if (sideEffects<S>()[action.type]) {
-    const mutatedAction = sideEffects<S>()[action.type](context, action);
+>(getEventCallback: (id: string) => () => void): IMiddleware<S> => (context) => (next) => (action) => {
+  const sideEffect = sideEffects<S>(getEventCallback)[action.type];
+  if (sideEffect) {
+    const mutatedAction = sideEffect(context, action);
     return next(mutatedAction || action);
   }
   return next(action);

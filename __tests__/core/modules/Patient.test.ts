@@ -1,8 +1,6 @@
 import Store from "@/lib/Store/Store";
-import type { IStore, IReducerMap } from "@/lib/Store/Store";
+import type { IReducerMap } from "@/lib/Store/Store";
 import PatientModule from "@/lib/Patient/Patient";
-import Scheduler from "@/lib/Scheduler/Scheduler";
-import { IScheduler } from "@/lib/Scheduler/Scheduler";
 import type { IGameContext, IGameState } from "@/core/Game";
 
 let initialPatientState = {
@@ -34,7 +32,6 @@ beforeEach(() => {
     reducers: patientReducers,
   });
 
-  context.scheduler = Scheduler({ context });
 });
 
 describe("PatientModule", () => {
