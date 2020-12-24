@@ -11,7 +11,7 @@ interface IConditionalMonitorParameters<S> {
 
 interface IConditional<S> {
   check: (state: S) => boolean;
-  invoke: (state: S, dispatch: IStore<S>["dispatch"]) => void;
+  execute: (state: S, dispatch: IStore<S>["dispatch"]) => void;
 }
 
 function ConditionalMonitorModule<S>({
@@ -21,7 +21,7 @@ function ConditionalMonitorModule<S>({
   function _checkAll(newState: S) {
     for (const condition of conditions) {
       if (condition.check(newState)) {
-        condition.invoke(newState, store.dispatch);
+        condition.execute(newState, store.dispatch);
       }
     }
   }

@@ -18,13 +18,13 @@ describe("ConditionalMonitorModule", () => {
     expect(monitor).toEqual(expect.any(Object));
   });
 
-  it("invokes a callback if the condition is met right when store is attached", (done) => {
+  it("executes a callback if the condition is met right when store is attached", (done) => {
     const monitor = ConditionalMonitor({
       store,
       conditions: [
         {
           check: (state) => state === 1,
-          invoke: (state, dispatch) => {
+          execute: (state, dispatch) => {
             done();
           },
         },
@@ -32,14 +32,14 @@ describe("ConditionalMonitorModule", () => {
     });
   });
 
-  it("invokes a callback if the condition is met after a change in the state", (done) => {
+  it("executes a callback if the condition is met after a change in the state", (done) => {
     const cb = jest.fn();
     ConditionalMonitor({
       store,
       conditions: [
         {
           check: (s) => s === 2,
-          invoke: () => {
+          execute: () => {
             cb();
             done();
           },

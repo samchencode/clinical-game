@@ -84,7 +84,7 @@ describe("Abstract Game Bridge", () => {
       conditionals: [
         {
           check: (s) => s.patient === 0,
-          invoke: () => {
+          execute: () => {
             done();
           },
         },
