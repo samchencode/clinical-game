@@ -40,7 +40,7 @@ describe("Abstract Game Bridge", () => {
     const game = Game({
       viewAgent: null,
       initialPatientState: 0,
-      patientOptions: [
+      playerOptions: [
         {
           name: "TEST_OPTION",
           isAvailable: (s) => false,
@@ -54,7 +54,7 @@ describe("Abstract Game Bridge", () => {
     const game = Game({
       viewAgent: null,
       initialPatientState: 0,
-      patientOptions: [
+      playerOptions: [
         {
           name: "UNAVAILABLE_OPTION",
           isAvailable: (s) => false,
@@ -68,12 +68,12 @@ describe("Abstract Game Bridge", () => {
       ],
     });
 
-    expect(game.patient.getOptions()).toEqual(
+    expect(game.options.getOptions()).toEqual(
       expect.arrayContaining([
         expect.not.objectContaining({ name: "UNAVAILABLE_OPTION" }),
       ])
     );
-    expect(game.patient.getOptions()).toEqual(
+    expect(game.options.getOptions()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ name: "AVAILABLE_OPTION" }),
       ])

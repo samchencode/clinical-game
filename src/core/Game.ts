@@ -4,7 +4,7 @@ import type {
   IScheduler,
   ISchedulerParameters,
 } from "@/lib/Scheduler/Scheduler";
-import createEventFactory from '@/lib/Scheduler/Event';
+import createEventFactory from "@/lib/Scheduler/Event";
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type {
   IPatientModuleLoaderParameters,
@@ -22,12 +22,17 @@ import type {
 } from "@/lib/Conditional/ConditionalMonitor";
 import type { IScribe } from "@/lib/Scribe/Scribe";
 import { GameStatus } from "./store/BaseGameState";
+import OptionManager from "@/lib/OptionManager";
+import type {
+  IOptionManagerParameters,
+  IOptionManager,
+} from "@/lib/OptionManager";
 
 interface IGameOptions<P> {
   viewAgent: IViewModuleParameters<IGameState<P>>["viewAgent"];
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
-  patientOptions?: IPatientModuleParameters<P>["options"];
+  playerOptions?: IOptionManagerParameters<P>["options"];
   initialScheduledEvents?: ISchedulerParameters<P>["initialEvents"];
   conditionals?: IConditionalMonitorParameters<P>["conditions"];
 }
@@ -35,10 +40,11 @@ interface IGameOptions<P> {
 interface IGameContext<P> {
   store: IStore<IGameState<P>>;
   scheduler: IScheduler<P>;
-  patient: IPatient<P>;
+  patient: IPatient;
   scribe: IScribe;
   view: IView;
   conditional: IConditionalMonitor;
+  options: IOptionManager<P>;
 }
 
 function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
@@ -49,6 +55,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     scribe: null,
     view: null,
     conditional: null,
+    options: null,
   };
 
   const loader = loadModules<P>({
@@ -58,10 +65,17 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     },
   });
 
-  const { factory: eventFactory, getEventCallback } = createEventFactory(gameContext);
+  const { factory: eventFactory, getEventCallback } = createEventFactory(
+    gameContext
+  );
 
   gameContext.store = loader.Store({
     middleware: [createSchedulerMiddleware<IGameState<P>>(getEventCallback)],
+  });
+
+  gameContext.options = OptionManager({
+    options: options.playerOptions,
+    context: gameContext,
   });
 
   gameContext.conditional = ConditionalMonitor({
@@ -78,14 +92,11 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   });
 
   gameContext.patient = loader.Patient({
-    options: options.patientOptions,
     context: gameContext,
   });
 
   gameContext.view = View({
-    patient: gameContext.patient,
-    store: gameContext.store,
-    scribe: gameContext.scribe,
+    context: gameContext,
     viewAgent: options.viewAgent,
   });
   // TODO: close the view if the game loses. I should refactor this elsewhere...

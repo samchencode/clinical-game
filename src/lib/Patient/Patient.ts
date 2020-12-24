@@ -1,13 +1,9 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
-import type { IReducerMap, IReducer, IStore } from "@/lib/Store/Store";
-import type { IOption, IOptionParameters } from "./OptionsManager";
-import OptionsManager from "./OptionsManager";
+import type { IReducerMap, IReducer } from "@/lib/Store/Store";
 import { deepClone } from "../utils";
 import type { IGameContext } from "@/core/Game";
 
-interface IPatient<P> {
-  getOptions: () => IOption<P>[];
-}
+interface IPatient {}
 
 interface IPatientState<P> {
   patient: P;
@@ -15,7 +11,6 @@ interface IPatientState<P> {
 
 interface IPatientModuleParameters<P> {
   context: Partial<IGameContext<P>>;
-  options?: IOptionParameters<P>[];
 }
 
 interface IPatientModuleLoaderParameters<P> {
@@ -23,21 +18,8 @@ interface IPatientModuleLoaderParameters<P> {
   reducers: IReducerMap<P>;
 }
 
-function PatientModule<P>({
-  options: optionParams = [],
-  context,
-}: IPatientModuleParameters<P>): IPatient<P> {
-  const optionsManager = OptionsManager<P>({
-    context,
-    options: optionParams,
-  });
-
-  return {
-    getOptions: optionsManager.getOptions.bind(
-      null,
-      context.store.getState().patient
-    ),
-  };
+function PatientModule<P>({ context }: IPatientModuleParameters<P>): IPatient {
+  return {};
 }
 
 const _makePatientStateReducers = <P>(
@@ -56,7 +38,7 @@ const _makePatientStateReducers = <P>(
 
 function createPatientModule<P>(
   params: IPatientModuleLoaderParameters<P>
-): IModuleLoader<IPatient<P>, IPatientModuleParameters<P>> {
+): IModuleLoader<IPatient, IPatientModuleParameters<P>> {
   return {
     load(helper) {
       helper.storeBuilder.registerInitialState(() => ({

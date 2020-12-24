@@ -1,13 +1,9 @@
-import type { IStore } from "@/lib/Store/Store";
-import type { IPatient } from "@/lib/Patient/Patient";
-import type { IScribe } from "@/lib/Scribe/Scribe";
+import type { IGameContext } from "@/core/Game";
 import ConsoleAgent from "./Console";
 import VueAgent from "./Vue";
 
 interface IViewModuleParameters<S> {
-  store: IStore<S>;
-  patient: IPatient<unknown>;
-  scribe: IScribe;
+  context: IGameContext<unknown>;
   viewAgent: "console" | "vue" | IViewAgent;
   vueInstance?: any;
 }
@@ -16,24 +12,24 @@ interface IView {
   close: () => void,
 }
 
-function ViewModule<S>(params: IViewModuleParameters<S>): IView {
+function ViewModule<S>({ viewAgent, context, vueInstance }: IViewModuleParameters<S>): IView {
   let agent: IViewAgent;
 
-  if (params.viewAgent === null) {
+  if (viewAgent === null) {
     return { close: () => {} };
-  } else if (params.viewAgent === "console") {
+  } else if (viewAgent === "console") {
     agent = ConsoleAgent();
-  } else if (params.viewAgent === "vue") {
+  } else if (viewAgent === "vue") {
     agent = VueAgent(/* May add vue instance here */);
   } else {
-    agent = params.viewAgent;
+    agent = viewAgent;
   }
 
-  params.store.subscribe((newState) => {
+  context.store.subscribe(() => {
     const visitor = agent.renderer();
 
-    const options = params.patient.getOptions();
-    const lines = params.scribe.getScripts();
+    const options = context.options.getOptions();
+    const lines = context.scribe.getScripts();
     lines.forEach((l) => l.view(visitor));
     options.forEach((l) => l.view(visitor));
 

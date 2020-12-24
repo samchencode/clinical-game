@@ -26,27 +26,34 @@ function OptionFactory<P>(
   };
 }
 
-interface OptionManager<P> {
-  getOptions: (patientState: P) => IOption<P>[];
+interface IOptionManager<P> {
+  getOptions: () => IOption<P>[];
 }
 
-interface OptionManagerParameters<P> {
-  options: IOptionParameters<P>[];
+interface IOptionManagerParameters<P> {
   context: Partial<IGameContext<P>>;
+  options?: IOptionParameters<P>[];
 }
 
-function OptionsManager<P>({
+function OptionManagerModule<P>({
   context,
-  options: optionParams,
-}: OptionManagerParameters<P>): OptionManager<P> {
+  options: optionParams = [],
+}: IOptionManagerParameters<P>): IOptionManager<P> {
   const options = optionParams.map((param) => OptionFactory(context, param));
 
-  function getOptions(patient: P) {
-    return options.filter((o) => o.isAvailable(patient));
-  }
-
-  return { getOptions };
+  return {
+    getOptions() {
+      return options.filter((o) =>
+        o.isAvailable(context.store.getState().patient)
+      );
+    },
+  };
 }
 
-export default OptionsManager;
-export type { IOptionParameters, IOption };
+export default OptionManagerModule;
+export type {
+  IOptionParameters,
+  IOption,
+  IOptionManagerParameters,
+  IOptionManager,
+};
