@@ -1,6 +1,6 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
 import type { IReducerMap, IReducer } from "@/lib/Store/Store";
-import { deepClone } from "../utils";
+import { deepClone } from "./utils";
 import type { IGameContext } from "@/core/Game";
 
 interface IPatient {}
@@ -9,7 +9,7 @@ interface IPatientState<P> {
   patient: P;
 }
 
-interface IPatientModuleParameters<P> {
+interface IPatientParameters<P> {
   context: Partial<IGameContext<P>>;
 }
 
@@ -18,7 +18,7 @@ interface IPatientModuleLoaderParameters<P> {
   reducers: IReducerMap<P>;
 }
 
-function PatientModule<P>({ context }: IPatientModuleParameters<P>): IPatient {
+function PatientModule<P>({ context }: IPatientParameters<P>): IPatient {
   return {};
 }
 
@@ -38,7 +38,7 @@ const _makePatientStateReducers = <P>(
 
 function createPatientModule<P>(
   params: IPatientModuleLoaderParameters<P>
-): IModuleLoader<IPatient, IPatientModuleParameters<P>> {
+): IModuleLoader<IPatient, IPatientParameters<P>> {
   return {
     load(helper) {
       helper.storeBuilder.registerInitialState(() => ({
@@ -57,7 +57,7 @@ export default PatientModule;
 export { createPatientModule };
 export type {
   IPatientModuleLoaderParameters,
-  IPatientModuleParameters,
+  IPatientParameters,
   IPatientState,
   IPatient,
 };

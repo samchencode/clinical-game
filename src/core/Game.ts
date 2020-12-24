@@ -8,9 +8,8 @@ import createEventFactory from "@/lib/Scheduler/Event";
 import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type {
   IPatientModuleLoaderParameters,
-  IPatientModuleParameters,
   IPatient,
-} from "@/lib/Patient/Patient";
+} from "@/lib/Patient";
 import type { IStore } from "@/lib/Store/Store";
 import View from "@/lib/View/View";
 import type { IView } from "@/lib/View/View";
