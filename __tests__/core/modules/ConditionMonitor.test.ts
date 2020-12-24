@@ -1,6 +1,6 @@
 import Store from "@/lib/Store/Store";
 import type { IStore } from "@/lib/Store/Store";
-import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
+import ConditionalMonitor from "@/lib/ConditionalMonitor";
 import type { IGameContext, IGameState } from "@/core/Game";
 
 describe("ConditionalMonitorModule", () => {

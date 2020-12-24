@@ -14,11 +14,11 @@ import type { IStore } from "@/lib/Store/Store";
 import View from "@/lib/View/View";
 import type { IView } from "@/lib/View/View";
 import type { IViewParameters } from "@/lib/View/View";
-import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
+import ConditionalMonitor from "@/lib/ConditionalMonitor";
 import type {
   IConditionalMonitorParameters,
   IConditionalMonitor,
-} from "@/lib/Conditional/ConditionalMonitor";
+} from "@/lib/ConditionalMonitor";
 import type { IScribe } from "@/lib/Scribe/Scribe";
 import { GameStatus } from "./store/BaseGameState";
 import OptionManager from "@/lib/OptionManager";
