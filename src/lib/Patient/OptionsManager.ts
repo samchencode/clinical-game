@@ -1,8 +1,8 @@
 import { IViewable } from "@/lib/View/View";
 import type { IGameContext } from "@/core/Game";
-import type { IExecutable } from "@/lib/Executable";
+import type { IExecutable, WithContext } from "@/lib/Executable";
 
-interface IOptionParameters<P> extends IExecutable<P> {
+interface IOptionParameters<P> extends IExecutable<P, WithContext<P>> {
   name: string;
   isAvailable: (patientState: P) => boolean;
 }

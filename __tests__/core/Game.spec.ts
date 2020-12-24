@@ -83,7 +83,7 @@ describe("Abstract Game Bridge", () => {
       initialPatientState: 0,
       conditionals: [
         {
-          check: (s) => s.patient === 0,
+          check: (patient) => patient === 0,
           execute: () => {
             done();
           },

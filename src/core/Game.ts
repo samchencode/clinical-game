@@ -28,7 +28,7 @@ interface IGameOptions<P> {
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   patientOptions?: IPatientModuleParameters<P>["options"];
   initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
-  conditionals?: IConditionalMonitorParameters<IGameState<P>>["conditions"];
+  conditionals?: IConditionalMonitorParameters<P>["conditions"];
 }
 
 interface IGameContext<P> {
@@ -62,7 +62,6 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   });
 
   gameContext.conditional = ConditionalMonitor({
-    store: gameContext.store,
     conditions: options.conditionals,
     context: gameContext,
   });
