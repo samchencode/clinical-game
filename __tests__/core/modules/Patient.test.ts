@@ -20,11 +20,9 @@ let patientReducers: IReducerMap<State> = {
   },
 };
 
-let store: IStore<State>;
-let scheduler: IScheduler;
-let context: Context;
+let context: Context = {};
 beforeEach(() => {
-  store = Store<State>({
+  context.store = Store<State>({
     initialState: {
       patient: { ...initialPatientState },
       scheduler: {
@@ -36,8 +34,7 @@ beforeEach(() => {
     reducers: patientReducers,
   });
 
-  scheduler = Scheduler({ store, context });
-  context = { store, scheduler };
+  context.scheduler = Scheduler({ context });
 });
 
 describe("PatientModule", () => {

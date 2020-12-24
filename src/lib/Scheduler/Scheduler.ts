@@ -1,5 +1,4 @@
 import type { IModuleLoader } from "@/core/module/ModuleLoader";
-import type { IStore } from "@/lib/Store/Store";
 import schedulerReducers from "./schedulerReducers";
 import * as actions from "./schedulerActionTypes";
 import { IEventParameters, IEvent } from "./Event";
@@ -12,8 +11,7 @@ interface IScheduler {
   cancelEvent: (eventId: string) => void;
 }
 
-interface ISchedulerParameters<S> {
-  store: IStore<S>;
+interface ISchedulerParameters {
   initialEvents?: IEventParameters[];
   context: Partial<IGameContext<unknown>>;
 }
@@ -30,28 +28,30 @@ const initialSchedulerState: ISchedulerState = {
   },
 };
 
-function SchedulerModule<S extends ISchedulerState>(
-  params: ISchedulerParameters<S>
+function SchedulerModule(
+  {initialEvents, context}: ISchedulerParameters
 ): IScheduler {
-  if (params.initialEvents) {
-    params.store.dispatch({
+  const { store } = context;
+
+  if (initialEvents) {
+    store.dispatch({
       type: actions.REGISTER_EVENT,
-      payload: params.initialEvents.map(Event),
+      payload: initialEvents.map(Event),
     });
   }
 
   function getPendingEvents() {
-    return params.store.getState().scheduler.pendingDispatch;
+    return store.getState().scheduler.pendingDispatch;
   }
 
   function scheduleEvent(e: IEventParameters) {
     const event = Event(e);
-    params.store.dispatch({ type: actions.REGISTER_EVENT, payload: event });
+    store.dispatch({ type: actions.REGISTER_EVENT, payload: event });
     return event;
   }
 
   function cancelEvent(eventId: string) {
-    params.store.dispatch({ type: actions.CANCEL_EVENT, payload: eventId });
+    store.dispatch({ type: actions.CANCEL_EVENT, payload: eventId });
   }
 
   return {
@@ -63,7 +63,7 @@ function SchedulerModule<S extends ISchedulerState>(
 
 function createSchedulerModule<S extends ISchedulerState>(): IModuleLoader<
   IScheduler,
-  ISchedulerParameters<S>
+  ISchedulerParameters
 > {
   return {
     load(helper) {

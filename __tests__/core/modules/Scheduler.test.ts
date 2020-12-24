@@ -41,7 +41,7 @@ beforeEach(() => {
 
 describe("SchedulerModule", () => {
   it("creates a scheduler module instance", () => {
-    const scheduler = Scheduler({ store, context });
+    const scheduler = Scheduler({ context });
     expect(scheduler).not.toBeFalsy();
   });
 
@@ -51,7 +51,7 @@ describe("SchedulerModule", () => {
       { delayMs: 0, action: { type: "TEST" } },
     ];
 
-    Scheduler({ store, initialEvents, context });
+    Scheduler({ initialEvents, context });
     expect(store.getState().scheduler.pendingDispatch.length).toBe(2);
     expect(store.getState().scheduler.pendingDispatch[0].action.type).toBe(
       "TEST"
@@ -71,7 +71,7 @@ describe("SchedulerModule", () => {
       },
     });
 
-    Scheduler({ store, initialEvents, context });
+    Scheduler({ initialEvents, context: { store } });
     expect(store.getState().scheduler.pendingDispatch[0].timerId).toBeDefined();
 
     jest.runAllTimers();
@@ -88,7 +88,6 @@ describe("SchedulerModule", () => {
     });
 
     Scheduler({
-      store,
       initialEvents: [{ delayMs: 250, action: { type: "TEST" }, repeat: 1 }],
       context,
     });
@@ -101,7 +100,7 @@ describe("SchedulerModule", () => {
   });
 
   it("allows scheduling events after creation", (done) => {
-    const store = Store<ISchedulerState>({
+    const store = Store<State>({
       ...storeParams,
       reducers: {
         ...reducers,
@@ -109,13 +108,13 @@ describe("SchedulerModule", () => {
       },
     });
 
-    const s = Scheduler({ store, context });
+    const s = Scheduler({ context: { store } });
     s.scheduleEvent({ delayMs: 250, action: { type: "TEST" } });
     jest.runAllTimers();
   });
 
   it("allows canceling events after scheduling", () => {
-    const s = Scheduler({ store, context });
+    const s = Scheduler({ context });
     const event = s.scheduleEvent({ delayMs: 250, action: { type: "TEST" } });
     s.cancelEvent(event.eventId);
     expect(s.getPendingEvents()).not.toContain(expect.anything());

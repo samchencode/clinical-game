@@ -27,7 +27,7 @@ interface IGameOptions<P> {
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   patientOptions?: IPatientModuleParameters<P>["options"];
-  initialScheduledEvents?: ISchedulerParameters<IGameState<P>>["initialEvents"];
+  initialScheduledEvents?: ISchedulerParameters["initialEvents"];
   conditionals?: IConditionalMonitorParameters<P>["conditions"];
 }
 
@@ -69,7 +69,6 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   gameContext.scribe = loader.Scribe({ store: gameContext.store });
 
   gameContext.scheduler = loader.Scheduler({
-    store: gameContext.store,
     initialEvents: options.initialScheduledEvents,
     context: gameContext,
   });
