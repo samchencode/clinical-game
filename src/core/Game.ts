@@ -13,7 +13,7 @@ import type {
 import type { IStore } from "@/lib/Store/Store";
 import View from "@/lib/View/View";
 import type { IView } from "@/lib/View/View";
-import type { IViewModuleParameters } from "@/lib/View/View";
+import type { IViewParameters } from "@/lib/View/View";
 import ConditionalMonitor from "@/lib/Conditional/ConditionalMonitor";
 import type {
   IConditionalMonitorParameters,
@@ -28,7 +28,7 @@ import type {
 } from "@/lib/OptionManager";
 
 interface IGameOptions<P> {
-  viewAgent: IViewModuleParameters<IGameState<P>>["viewAgent"];
+  viewAgent: IViewParameters<IGameState<P>>["viewAgent"];
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
   patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   playerOptions?: IOptionManagerParameters<P>["options"];

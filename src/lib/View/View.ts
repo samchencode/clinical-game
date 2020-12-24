@@ -2,17 +2,16 @@ import type { IGameContext } from "@/core/Game";
 import ConsoleAgent from "./Console";
 import VueAgent from "./Vue";
 
-interface IViewModuleParameters<S> {
+interface IViewParameters<S> {
   context: IGameContext<unknown>;
   viewAgent: "console" | "vue" | IViewAgent;
-  vueInstance?: any;
 }
 
 interface IView {
   close: () => void,
 }
 
-function ViewModule<S>({ viewAgent, context, vueInstance }: IViewModuleParameters<S>): IView {
+function ViewModule<S>({ viewAgent, context }: IViewParameters<S>): IView {
   let agent: IViewAgent;
 
   if (viewAgent === null) {
@@ -56,4 +55,4 @@ interface IViewable {
 }
 
 export default ViewModule;
-export type { IViewable, IViewAgent, IViewableVisitor, IViewModuleParameters, IView };
+export type { IViewable, IViewAgent, IViewableVisitor, IViewParameters, IView };
