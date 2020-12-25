@@ -1,10 +1,10 @@
 import ModuleLoadHelper from './ModuleLoadHelper';
 import type { IBaseGameState } from '@/core/store/BaseGameState';
 import createBaseGameStore from '@/core/store/gameStore';
-import { createPatientModule } from '@/lib/Patient';
+import { createPatientModule } from '@/lib/Patient/Patient';
 import { createSchedulerModule } from '@/lib/Scheduler/Scheduler';
 import type { ISchedulerState } from '@/lib/Scheduler/Scheduler';
-import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient';
+import type { IPatientModuleLoaderParameters, IPatientState } from '@/lib/Patient/Patient';
 import { createScribeModule } from '@/lib/Scribe/Scribe';
 import type { IScribeState } from '@/lib/Scribe/Scribe';
 

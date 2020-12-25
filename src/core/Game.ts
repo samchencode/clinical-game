@@ -9,7 +9,7 @@ import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
 import type {
   IPatientModuleLoaderParameters,
   IPatient,
-} from "@/lib/Patient";
+} from "@/lib/Patient/Patient";
 import type { IStore } from "@/lib/Store/Store";
 import View from "@/lib/View/View";
 import type { IView } from "@/lib/View/View";
@@ -30,7 +30,6 @@ import type {
 interface IGameOptions<P> {
   viewAgent: IViewParameters<IGameState<P>>["viewAgent"];
   initialPatientState: IPatientModuleLoaderParameters<P>["initialState"];
-  patientReducers?: IPatientModuleLoaderParameters<P>["reducers"];
   playerOptions?: IOptionManagerParameters<P>["options"];
   initialScheduledEvents?: ISchedulerParameters<P>["initialEvents"];
   conditionals?: IConditionalMonitorParameters<P>["conditions"];
@@ -39,7 +38,7 @@ interface IGameOptions<P> {
 interface IGameContext<P> {
   store: IStore<IGameState<P>>;
   scheduler: IScheduler<P>;
-  patient: IPatient;
+  patient: IPatient<P>;
   scribe: IScribe;
   view: IView;
   conditional: IConditionalMonitor;
@@ -60,7 +59,6 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   const loader = loadModules<P>({
     patient: {
       initialState: options.initialPatientState,
-      reducers: options.patientReducers,
     },
   });
 

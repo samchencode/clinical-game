@@ -1,0 +1,1 @@
+export const SET_PATIENT_STATE = "SET_PATIENT_STATE";

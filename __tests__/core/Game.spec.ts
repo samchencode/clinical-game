@@ -13,26 +13,17 @@ describe("Abstract Game Bridge", () => {
   it("accepts patientState and reducers to initialize gameState", () => {
     const game = Game({
       viewAgent: null,
-      initialPatientState: 0,
-      patientReducers: {
-        ADD: (state: number, payload: number) => state + payload,
-      },
+      initialPatientState: 0
     });
 
-    expect(game.store.getState().patient).toBe(0);
+    expect(game.patient.getState()).toBe(0);
   });
 
   it("accepts a scheduled event and runs an action after timer", (done) => {
-    const dispatchTestAction = (_: unknown, ctx: any) =>
-      ctx.store.dispatch({ type: "DONE" });
-
     const game = Game({
       viewAgent: null,
       initialPatientState: 0,
-      patientReducers: {
-        DONE: (s) => !done() && s,
-      },
-      initialScheduledEvents: [{ execute: dispatchTestAction, delayMs: 0 }],
+      initialScheduledEvents: [{ execute: () => done(), delayMs: 0 }],
     });
   });
 
