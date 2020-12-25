@@ -1,4 +1,4 @@
-import type { IModuleLoader } from "@/core/module/ModuleLoader";
+import type { IModuleLoader } from "@/core/loader/ModuleLoader";
 import schedulerReducers from "./schedulerReducers";
 import * as actions from "./schedulerActionTypes";
 import { IEventParameters, IEvent } from "./Event";

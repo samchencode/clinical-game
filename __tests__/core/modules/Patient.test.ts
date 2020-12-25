@@ -1,6 +1,6 @@
-import Patient from "@/lib/Patient/Patient";
-import type { IPatient } from "@/lib/Patient/Patient";
-import reducers from "@/lib/Patient/patientReducers";
+import Patient from "@/core/modules/Patient/Patient";
+import type { IPatient } from "@/core/modules/Patient/Patient";
+import reducers from "@/core/modules/Patient/patientReducers";
 import Store from "@/lib/Store/Store";
 import type { IGameContext, IGameState } from "@/core/Game";
 

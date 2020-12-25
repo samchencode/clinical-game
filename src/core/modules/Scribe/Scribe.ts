@@ -1,8 +1,8 @@
-import type { IModuleLoader } from "@/core/module/ModuleLoader";
+import type { IModuleLoader } from "@/core/loader/ModuleLoader";
 import type { IStore } from "@/lib/Store/Store";
 import * as actions from "./scribeActions";
 import scribeReducer from './scribeReducers';
-import { IViewable, IViewableVisitor } from '@/lib/View/View';
+import { IViewable, IViewableVisitor } from '@/core/modules/View/View';
 
 interface IScript extends IViewable {
   type: "text" | "image";

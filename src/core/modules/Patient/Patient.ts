@@ -1,4 +1,4 @@
-import type { IModuleLoader } from "@/core/module/ModuleLoader";
+import type { IModuleLoader } from "@/core/loader/ModuleLoader";
 import type { IGameContext } from "@/core/Game";
 import patientReducers from "./patientReducers";
 import * as actions from "./patientActions";

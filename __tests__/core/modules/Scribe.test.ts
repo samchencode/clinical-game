@@ -1,5 +1,5 @@
-import Scribe from "@/lib/Scribe/Scribe";
-import scribeReducers from "@/lib/Scribe/scribeReducers";
+import Scribe from "@/core/modules/Scribe/Scribe";
+import scribeReducers from "@/core/modules/Scribe/scribeReducers";
 import Store from "@/lib/Store/Store";
 import type { IStore, IReducerMap } from "@/lib/Store/Store";
 import type { IGameContext, IGameState } from "@/core/Game";

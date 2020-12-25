@@ -1,5 +1,5 @@
 import { generateRandomString } from "@/lib/utils";
-import type { IExecutable, WithPatientAndContext } from "@/lib/Executable";
+import type { IExecutable, WithPatientAndContext } from "@/core/common/Executable";
 import type { IGameContext } from '@/core/Game';
 
 interface IEventParameters<P> extends IExecutable<P, WithPatientAndContext<P>> {

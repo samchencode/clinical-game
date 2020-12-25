@@ -1,31 +1,31 @@
-import loadModules from "./module/loadModules";
-import type { IGameState } from "./module/loadModules";
+import loadModules from "./loader/loadModules";
+import type { IGameState } from "./loader/loadModules";
 import type {
   IScheduler,
   ISchedulerParameters,
-} from "@/lib/Scheduler/Scheduler";
-import createEventFactory from "@/lib/Scheduler/Event";
-import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
+} from "@/core/modules/Scheduler/Scheduler";
+import createEventFactory from "@/core/modules/Scheduler/Event";
+import createSchedulerMiddleware from "@/core/modules/Scheduler/schedulerMiddleware";
 import type {
   IPatientModuleLoaderParameters,
   IPatient,
-} from "@/lib/Patient/Patient";
+} from "@/core/modules/Patient/Patient";
 import type { IStore } from "@/lib/Store/Store";
-import View from "@/lib/View/View";
-import type { IView } from "@/lib/View/View";
-import type { IViewParameters } from "@/lib/View/View";
-import ConditionalMonitor from "@/lib/ConditionalMonitor";
+import View from "@/core/modules/View/View";
+import type { IView } from "@/core/modules/View/View";
+import type { IViewParameters } from "@/core/modules/View/View";
+import ConditionalMonitor from "@/core/modules/ConditionalMonitor";
 import type {
   IConditionalMonitorParameters,
   IConditionalMonitor,
-} from "@/lib/ConditionalMonitor";
-import type { IScribe } from "@/lib/Scribe/Scribe";
+} from "@/core/modules/ConditionalMonitor";
+import type { IScribe } from "@/core/modules/Scribe/Scribe";
 import { GameStatus } from "./store/BaseGameState";
-import OptionManager from "@/lib/OptionManager";
+import OptionManager from "@/core/modules/OptionManager";
 import type {
   IOptionManagerParameters,
   IOptionManager,
-} from "@/lib/OptionManager";
+} from "@/core/modules/OptionManager";
 
 interface IGameOptions<P> {
   viewAgent: IViewParameters<IGameState<P>>["viewAgent"];

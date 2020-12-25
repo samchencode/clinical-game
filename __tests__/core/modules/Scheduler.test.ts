@@ -1,10 +1,10 @@
-import Scheduler from "@/lib/Scheduler/Scheduler";
-import type { IEventParameters } from "@/lib/Scheduler/Event";
+import Scheduler from "@/core/modules/Scheduler/Scheduler";
+import type { IEventParameters } from "@/core/modules/Scheduler/Event";
 import Store from "@/lib/Store/Store";
 import type { IStore, IReducerMap } from "@/lib/Store/Store";
-import schedulerReducers from "@/lib/Scheduler/schedulerReducers";
-import createSchedulerMiddleware from "@/lib/Scheduler/schedulerMiddleware";
-import createEventFactory from "@/lib/Scheduler/Event";
+import schedulerReducers from "@/core/modules/Scheduler/schedulerReducers";
+import createSchedulerMiddleware from "@/core/modules/Scheduler/schedulerMiddleware";
+import createEventFactory from "@/core/modules/Scheduler/Event";
 import type { IGameContext, IGameState } from "@/core/Game";
 import createLoggerMiddleware from "@/lib/loggerMiddleware";
 

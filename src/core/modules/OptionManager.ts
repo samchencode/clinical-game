@@ -1,6 +1,6 @@
-import { IViewable } from "@/lib/View/View";
+import { IViewable } from "@/core/modules/View/View";
 import type { IGameContext } from "@/core/Game";
-import type { IExecutable, WithContext } from "@/lib/Executable";
+import type { IExecutable, WithContext } from "@/core/common/Executable";
 
 interface IOptionParameters<P> extends IExecutable<P, WithContext<P>> {
   name: string;

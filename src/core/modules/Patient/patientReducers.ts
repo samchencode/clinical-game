@@ -1,6 +1,6 @@
 import type { IReducerMap } from '@/lib/Store/Store';
 import type { IPatientState } from './Patient';
-import { deepClone, deepMerge } from "../utils";
+import { deepClone, deepMerge } from "../../../lib/utils";
 import * as actions from './patientActions';
 
 const patientReducers: <P>() => IReducerMap<IPatientState<P>> = () => ({

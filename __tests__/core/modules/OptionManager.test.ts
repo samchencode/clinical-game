@@ -1,6 +1,6 @@
 import Store from "@/lib/Store/Store";
 import type { IReducerMap } from "@/lib/Store/Store";
-import OptionManager from "@/lib/OptionManager";
+import OptionManager from "@/core/modules/OptionManager";
 import type { IGameContext, IGameState } from "@/core/Game";
 
 let initialPatientState = {

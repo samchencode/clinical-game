@@ -1,5 +1,5 @@
 import Game from "@/core/Game";
-import type { IViewAgent, IViewableVisitor } from "@/lib/View/View";
+import type { IViewAgent, IViewableVisitor } from "@/core/modules/View/View";
 
 describe("Abstract Game Bridge", () => {
   it("instantiates empty Game context", () => {
