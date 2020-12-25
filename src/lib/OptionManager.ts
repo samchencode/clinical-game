@@ -55,6 +55,9 @@ function OptionManagerModule<P>({
     },
     setOptions(params) {
       options = _paramsToOptions(params);
+      // uses store update to alert view to update
+      // if more modules depend on options and modified options, add to store
+      context.store.forceUpdate();
     }
   };
 }
