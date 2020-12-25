@@ -26,6 +26,7 @@ const option = {
       execute(state: any, ctx: any) {
         ctx.patient.setState({ atOffice: false });
         ctx.scribe.text("John got home safe!");
+        ctx.status.end();
       },
     });
   },

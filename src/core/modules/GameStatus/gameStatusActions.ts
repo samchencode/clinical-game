@@ -1,0 +1,2 @@
+export const GAME_STARTED = "GAME_STATUS_STARTED";
+export const GAME_ENDED = "GAME_STATUS_ENDED";

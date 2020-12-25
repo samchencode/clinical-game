@@ -20,12 +20,12 @@ import type {
   IConditionalMonitor,
 } from "@/core/modules/ConditionalMonitor";
 import type { IScribe } from "@/core/modules/Scribe/Scribe";
-import { GameStatus } from "./store/BaseGameState";
 import OptionManager from "@/core/modules/OptionManager";
 import type {
   IOptionManagerParameters,
   IOptionManager,
 } from "@/core/modules/OptionManager";
+import type { IGameStatus } from '@/core/modules/GameStatus/GameStatus';
 
 interface IGameOptions<P> {
   viewAgent: IViewParameters<IGameState<P>>["viewAgent"];
@@ -43,6 +43,7 @@ interface IGameContext<P> {
   view: IView;
   conditional: IConditionalMonitor;
   options: IOptionManager<P>;
+  status: IGameStatus;
 }
 
 function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
@@ -54,6 +55,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     view: null,
     conditional: null,
     options: null,
+    status: null,
   };
 
   const loader = loadModules<P>({
@@ -69,6 +71,8 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
   gameContext.store = loader.Store({
     middleware: [createSchedulerMiddleware<IGameState<P>>(getEventCallback)],
   });
+
+  gameContext.status = loader.GameStatus({ context: gameContext })
 
   gameContext.options = OptionManager({
     options: options.playerOptions,
@@ -97,8 +101,8 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     viewAgent: options.viewAgent,
   });
   // TODO: close the view if the game loses. I should refactor this elsewhere...
-  gameContext.store.subscribe((s) => {
-    if (s.status === GameStatus.WON || s.status === GameStatus.LOST) {
+  gameContext.store.subscribe(() => {
+    if (gameContext.status.hasEnded()) {
       gameContext.view.close();
     }
   });
