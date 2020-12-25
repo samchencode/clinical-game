@@ -153,4 +153,23 @@ describe("StoreModule", () => {
     expect(cb1).toBeCalledTimes(1);
     expect(cb2).toBeCalledTimes(1);
   });
+
+  it("allows force updating subscribers without any state change", (done) => {
+    const cb = jest.fn();
+    
+    const store = Store({
+      initialState: 0,
+      reducers: {}
+    });
+
+    store.subscribe((s) => {
+      expect(s).toBe(0);
+      cb(s);
+      done();
+    });
+
+    expect(cb).not.toHaveBeenCalled();
+    store.forceUpdate();
+    expect(cb).toHaveBeenCalledTimes(1);
+  })
 });

@@ -26,6 +26,7 @@ interface IStore<S> {
   getState: () => S;
   dispatch: (a: IAction) => void;
   subscribe: (cb: (newState: S) => void) => void;
+  forceUpdate: () => void;
 }
 
 interface IStoreParameters<S> {
@@ -78,10 +79,15 @@ function StoreModule<S>({
     _alertAllSubscribers(state);
   }
 
+  function forceUpdate() {
+    _alertAllSubscribers(state);
+  }
+
   return {
     getState,
     dispatch,
     subscribe,
+    forceUpdate,
   };
 }
 
