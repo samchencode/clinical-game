@@ -12,49 +12,23 @@ const game = Game({
     temperature: 36,
     atOffice: true,
   },
-  patientReducers: {
-    SEND_HOME: (state) => {
-      state.atOffice = false;
-      return state;
-    },
-  },
-  initialScheduledEvents: [
+  playerOptions: [
     {
-      action: {
-        type: "WRITE_LINE",
-        payload: {
-          type: "text",
-          data: "John Smith comes to your office to establish care",
-        },
-      },
-      delayMs: 0,
-    },
-  ],
-  patientOptions: [
-    {
-      name: "Send Him Home",
-      isAvailable: (patient) => patient.atOffice === true,
-      execute: (dispatch, scheduler) => {
-        dispatch({ type: "SEND_HOME" });
-        game.scribe.text("You sent him home!");
-        scheduler.scheduleEvent({
-          action: {
-            type: "WRITE_LINE",
-            payload: {
-              type: "text",
-              data: "John Smith arrived home safe and sound",
-            },
+      name: "Send him home",
+      isAvailable: p => p.atOffice === true,
+      execute(ctx) {
+        ctx.scribe.text('You sent him home!');
+        ctx.scheduler.scheduleEvent({
+          delayMs: 1000,
+          execute(state, ctx) {
+            ctx.patient.setState({ atOffice: false });
+            ctx.scribe.text("John got home safe!");
           },
-          delayMs: 2000,
-        });
-        scheduler.scheduleEvent({
-          action: {
-            type: "GAME_END",
-            payload: { win: true },
-          },
-          delayMs:2001,
-        });
+        })
       },
     },
-  ],
+  ]
 });
+
+game.scribe.text("John Smith comes to your office to establish care");
+
