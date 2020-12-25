@@ -4,7 +4,7 @@ import type { IExecutable, WithContext } from "@/lib/Executable";
 
 interface IOptionParameters<P> extends IExecutable<P, WithContext<P>> {
   name: string;
-  isAvailable: (patientState: P) => boolean;
+  isAvailable?: (patientState: P) => boolean;
 }
 
 interface IOption<P> extends IOptionParameters<P>, IViewable {
@@ -16,10 +16,12 @@ function OptionFactory<P>(
   params: IOptionParameters<P>
 ): IOption<P> {
   const select = params.execute.bind(null, context);
-
+  const isAvailable = params.isAvailable || (() => true);
+  
   return {
     ...params,
     select,
+    isAvailable,
     view: (visitor) => {
       visitor.displayOption(params.name, select);
     },
@@ -28,6 +30,7 @@ function OptionFactory<P>(
 
 interface IOptionManager<P> {
   getOptions: () => IOption<P>[];
+  setOptions: (params: IOptionParameters<P>[]) => void;
 }
 
 interface IOptionManagerParameters<P> {
@@ -39,7 +42,10 @@ function OptionManagerModule<P>({
   context,
   options: optionParams = [],
 }: IOptionManagerParameters<P>): IOptionManager<P> {
-  const options = optionParams.map((param) => OptionFactory(context, param));
+  const _paramsToOptions = (params: IOptionParameters<P>[]) => params.map((p) => OptionFactory(context, p));
+  let options: IOption<P>[] = _paramsToOptions(optionParams); 
+  
+
 
   return {
     getOptions() {
@@ -47,6 +53,9 @@ function OptionManagerModule<P>({
         o.isAvailable(context.store.getState().patient)
       );
     },
+    setOptions(params) {
+      options = _paramsToOptions(params);
+    }
   };
 }
 

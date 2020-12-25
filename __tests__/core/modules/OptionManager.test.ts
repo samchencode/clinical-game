@@ -1,6 +1,6 @@
 import Store from "@/lib/Store/Store";
 import type { IReducerMap } from "@/lib/Store/Store";
-import OptionManager from '@/lib/OptionManager';
+import OptionManager from "@/lib/OptionManager";
 import type { IGameContext, IGameState } from "@/core/Game";
 
 let initialPatientState = {
@@ -31,7 +31,6 @@ beforeEach(() => {
     },
     reducers: optionsReducers,
   });
-
 });
 
 describe("OptionManager", () => {
@@ -74,7 +73,7 @@ describe("OptionManager", () => {
   });
 
   it("hides options that arent available", () => {
-    const myOpt = { ...option }
+    const myOpt = { ...option };
     myOpt.isAvailable = () => false;
 
     const options = OptionManager<PS>({
@@ -91,5 +90,54 @@ describe("OptionManager", () => {
     });
     options.getOptions()[0].select();
     expect(options.getOptions()).toEqual([]);
+  });
+
+  it("allows an empty array of options to replace the original", () => {
+    const options = OptionManager<PS>({
+      context,
+      options: [option],
+    });
+
+    options.setOptions([]);
+    expect(options.getOptions()).toEqual([]);
+  });
+
+  it("allows a new array of options to replace the original", (done) => {
+    const options = OptionManager<PS>({
+      context,
+      options: [option],
+    });
+
+    const newOption = {
+      name: "TEST_OPTION",
+      isAvailable: () => true,
+      execute: () => done(),
+    };
+
+    options.setOptions([newOption, option]);
+    expect(options.getOptions()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: newOption.name }),
+        expect.objectContaining({ name: option.name }),
+      ])
+    );
+
+    options.getOptions()[0].execute(null);
+  });
+
+  it("should assume options are available by default", (done) => {
+    const option = {
+      name: "TEST_OPTION",
+      execute: () => done(),
+    };
+
+    const options = OptionManager<PS>({
+      context,
+      options: [option],
+    });
+
+    const [ opt ] = options.getOptions();
+    expect(opt).toEqual(expect.objectContaining({name: option.name}));
+    opt.execute(null);
   });
 });
