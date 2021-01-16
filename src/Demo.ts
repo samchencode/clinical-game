@@ -1,7 +1,7 @@
 import Game from "@/core/Game";
 
 const game = Game({
-  viewAgent: "console",
+  viewAgent: "vue",
   initialPatientState: {
     name: "John Smith",
     status: "alive",

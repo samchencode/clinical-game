@@ -13,3 +13,6 @@ node_modules
 
 # Bundled Code
 dist
+
+# Debug Logs
+debug.log

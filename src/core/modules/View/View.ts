@@ -1,6 +1,6 @@
 import type { IGameContext } from "@/core/Game";
 import ConsoleAgent from "./Console";
-import VueAgent from "./Vue";
+import VueAgent from "./Vue/Vue";
 
 interface IViewParameters<S> {
   context: IGameContext<unknown>;

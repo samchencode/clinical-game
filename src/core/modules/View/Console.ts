@@ -1,5 +1,5 @@
 import { IViewAgent } from "./View";
-const readline = require("readline");
+const readline = {} as any //require("readline");
 
 function ConsoleAgent(): IViewAgent {
   // FIXME: This doesnt clear options list before displaying new ones

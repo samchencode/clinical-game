@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["es5", "dom"],
     "noImplicitAny": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "jsx": "preserve",
+    "moduleResolution": "node"
   }
 }
