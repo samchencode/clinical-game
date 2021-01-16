@@ -12,6 +12,7 @@ interface IConditionalMonitorParameters<P> {
 
 interface IConditional<P> extends IExecutable<P, WithPatientAndContext<P>> {
   check: (patient: P) => boolean;
+  once?: boolean,
 }
 
 function ConditionalMonitorModule<P>({
@@ -20,12 +21,19 @@ function ConditionalMonitorModule<P>({
 }: IConditionalMonitorParameters<P>): IConditionalMonitor {
   const { store } = context;
 
+  const stale = new Map(conditions.filter(c => c.once).map(c => [c, 0]));
+
   function _checkAll(patient: P) {
     for (const condition of conditions) {
-      if (condition.check(patient)) {
-        condition.execute(context, patient);
+      if (stale.get(condition) === undefined && condition.check(patient)) {
+        _execute(condition);
       }
     }
+  }
+
+  function _execute(condition: IConditional<P>) {
+    condition.execute(context, store.getState().patient);
+    if(condition.once) stale.set(condition, 1);
   }
 
   _checkAll(store.getState().patient);
