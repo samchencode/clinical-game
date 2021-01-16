@@ -1,5 +1,5 @@
 # Dependencies
-node_modules
+node_modules/*
 
 # Don't commit tests used during development
 **/*.test.ts
@@ -12,7 +12,7 @@ node_modules
 !__tests__/**/*.spec.js
 
 # Bundled Code
-dist
+dist/*
 
 # Debug Logs
 debug.log
