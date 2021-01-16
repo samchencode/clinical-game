@@ -26,6 +26,8 @@ import type {
   IOptionManager,
 } from "@/core/modules/OptionManager";
 import type { IGameStatus } from '@/core/modules/GameStatus/GameStatus';
+import SceneManager from '@/core/modules/SceneManager';
+import type { ISceneManager, ISceneManagerParameters } from '@/core/modules/SceneManager';
 
 interface IGameOptions<P> {
   viewAgent: IViewParameters<IGameState<P>>["viewAgent"];
@@ -33,6 +35,8 @@ interface IGameOptions<P> {
   playerOptions?: IOptionManagerParameters<P>["options"];
   initialScheduledEvents?: ISchedulerParameters<P>["initialEvents"];
   conditionals?: IConditionalMonitorParameters<P>["conditions"];
+  initialScene?: ISceneManagerParameters<P>["initialScene"];
+  scenes?: ISceneManagerParameters<P>["scenes"];
 }
 
 interface IGameContext<P> {
@@ -44,6 +48,7 @@ interface IGameContext<P> {
   conditional: IConditionalMonitor;
   options: IOptionManager<P>;
   status: IGameStatus;
+  scene: ISceneManager<P>;
 }
 
 function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
@@ -56,6 +61,7 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
     conditional: null,
     options: null,
     status: null,
+    scene: null,
   };
 
   const loader = loadModules<P>({
@@ -106,6 +112,12 @@ function AbstractGameModule<P>(options: IGameOptions<P>): IGameContext<P> {
       gameContext.view.close();
     }
   });
+
+  gameContext.scene = SceneManager({
+    context: gameContext,
+    scenes: options.scenes || {},
+    initialScene: options.initialScene
+  })
 
   return Object.create(gameContext);
 }
