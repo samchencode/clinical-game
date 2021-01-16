@@ -16,7 +16,7 @@ function ViewModule<S>({ viewAgent, context }: IViewParameters<S>): IView {
   if (viewAgent === null) {
     return { close: () => {} };
   } else if (viewAgent === "vue") {
-    agent = VueAgent();
+    agent = VueAgent(/* May add vue instance here */);
   } else {
     agent = viewAgent;
   }
