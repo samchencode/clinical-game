@@ -119,8 +119,8 @@ const scheduleLabs = (ctx: any) =>
   ctx.scheduler.scheduleEvent({
     delayMs: 1000,
     execute: (ctx: any, patient: any) => {
-      const { aPTT, PT, INR } = patient;
-      ctx.scribe.text(`aPTT: ${aPTT}, PT: ${PT}, INR: ${INR}`);
+      const { aPTT, PT, INR, platelets } = patient;
+      ctx.scribe.text(`aPTT: ${aPTT}, PT: ${PT}, INR: ${INR} platelets: ${platelets}`);
     },
   });
 
