@@ -24,7 +24,7 @@ const game = Game({
           ctx.scribe.text("You sent him home!");
           ctx.scheduler.scheduleEvent({
             delayMs: 1000,
-            execute(state: any, ctx: any) {
+            execute(ctx: any) {
               ctx.patient.setState({ atOffice: false });
               ctx.scribe.text("John got home safe!");
               ctx.status.end();

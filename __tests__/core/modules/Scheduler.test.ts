@@ -42,7 +42,7 @@ beforeEach(() => {
 });
 
 describe("SchedulerModule", () => {
-  const dispatchTestAction = (_: unknown, ctx: IGameContext<unknown>) =>
+  const dispatchTestAction = (ctx: IGameContext<unknown>) =>
     ctx.store.dispatch({ type: "TEST" });
 
   it("creates a scheduler module instance", () => {

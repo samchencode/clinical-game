@@ -23,7 +23,7 @@ function createEventFactory<P>(context: Partial<IGameContext<P>>) {
       repeat,
     }: IEventParameters<P>): IEvent {
       const eventId = generateRandomString();
-      eventCallbacks.set(eventId, () => execute(context.store.getState().patient, context));
+      eventCallbacks.set(eventId, () => execute(context, context.store.getState().patient));
 
       return { delayMs, repeat, eventId };
     },

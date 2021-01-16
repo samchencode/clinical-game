@@ -23,7 +23,7 @@ function ConditionalMonitorModule<P>({
   function _checkAll(patient: P) {
     for (const condition of conditions) {
       if (condition.check(patient)) {
-        condition.execute(patient, context);
+        condition.execute(context, patient);
       }
     }
   }
