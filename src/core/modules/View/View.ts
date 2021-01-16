@@ -1,10 +1,9 @@
 import type { IGameContext } from "@/core/Game";
-import ConsoleAgent from "./Console";
 import VueAgent from "./Vue/Vue";
 
 interface IViewParameters<S> {
   context: IGameContext<unknown>;
-  viewAgent: "console" | "vue" | IViewAgent;
+  viewAgent: "vue" | IViewAgent;
 }
 
 interface IView {
@@ -16,10 +15,8 @@ function ViewModule<S>({ viewAgent, context }: IViewParameters<S>): IView {
 
   if (viewAgent === null) {
     return { close: () => {} };
-  } else if (viewAgent === "console") {
-    agent = ConsoleAgent();
   } else if (viewAgent === "vue") {
-    agent = VueAgent(/* May add vue instance here */);
+    agent = VueAgent();
   } else {
     agent = viewAgent;
   }
