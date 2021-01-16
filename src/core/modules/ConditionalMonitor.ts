@@ -21,7 +21,7 @@ function ConditionalMonitorModule<P>({
 }: IConditionalMonitorParameters<P>): IConditionalMonitor {
   const { store } = context;
 
-  const stale = new Map(conditions.filter(c => c.once).map(c => [c, 0]));
+  const stale = new Map();
 
   function _checkAll(patient: P) {
     for (const condition of conditions) {
@@ -32,8 +32,8 @@ function ConditionalMonitorModule<P>({
   }
 
   function _execute(condition: IConditional<P>) {
-    condition.execute(context, store.getState().patient);
     if(condition.once) stale.set(condition, 1);
+    condition.execute(context, store.getState().patient);
   }
 
   _checkAll(store.getState().patient);
